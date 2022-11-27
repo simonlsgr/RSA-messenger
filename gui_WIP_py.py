@@ -5,20 +5,21 @@ from tkinter import *
 
 # Function to send message
 def send():
+    chat_window.config(state=NORMAL)
+    # Send message with bot response
     # Get the message from the user
     if user_input.get() != '':
         message = user_input.get()
         # Add the message to the chat window
         chat_window.config(state=NORMAL)
         chat_window.insert(END, "You: " + message + "\n")
-        chat_window.config(font=("Verdana", 15), state=DISABLED)
 
-    # Clear the user input
-    user_input.delete(0, END)
-    # Get the response from the bot
-    response = get_response(message)
-    # Add the response to the chat window
-    chat_window.insert(END, "Bot: " + response + "\n")
+        # Clear the user input
+        user_input.delete(0, END)
+        # Get the response from the bot
+        response = get_response()
+        # Add the response to the chat window
+        chat_window.insert(END, "Bot: " + response + "\n")
 
 # Function to get the bot response
 def get_response():
@@ -28,10 +29,12 @@ def get_response():
     return response
 
 
-# Create a window
+# Create a window and configuration
 window = tk.Tk()
 window.title("Messenger")
 window.geometry("400x500")
+window.maxsize(400, 485)
+window.minsize(400, 485)
 
 # Create a frame
 frame = tk.Frame(window)
@@ -44,6 +47,9 @@ scrollbar.pack(side=RIGHT, fill=Y)
 # Create a text box with input
 chat_window = tk.Text(frame, width=55, height=22, yscrollcommand=scrollbar.set)
 chat_window.pack(side=LEFT, fill=BOTH)
+# chat_window.insert(END, "You: " + "\n")
+chat_window.config(font=("Verdana"), state=DISABLED)
+
 
 # Create an entry box
 user_input = tk.Entry(window, width=50)
