@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+
 import customtkinter as ctk
-from customtkinter import *
 
 
 class Frame1(tk.Frame):
@@ -18,7 +18,7 @@ class Frame1(tk.Frame):
         self.label.grid()
         self.btn = ttk.Button(self.master, text="Test")
         self.btn.grid(column=1, row=6)
-
+        # test
 
 
 class App(tk.Tk):
