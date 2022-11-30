@@ -1,67 +1,55 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import *
+import customtkinter as ctk
+from customtkinter import *
 
 
-# Function to send message
-def send():
-    chat_window.config(state=NORMAL)
-    # Send message with bot response
-    # Get the message from the user
-    if user_input.get() != '':
-        message = user_input.get()
-        # Add the message to the chat window
-        chat_window.config(state=NORMAL)
-        chat_window.insert(END, "You: " + message + "\n")
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
-        # Clear the user input
-        user_input.delete(0, END)
-        # Get the response from the bot
-        response = get_response()
-        # Add the response to the chat window
-        chat_window.insert(END, "Bot: " + response + "\n")
+        self.title("Test")
+        self.geometry("400x400")
+        self.resizable(False, False)
+        self.configure(bg="#000000")
+        self.create_widgets()
+
+    def create_widgets(self):
+        # create chat window
+
+        self.chat_window = tk.Text(self, bg="#000000", fg="#FFFFFF",
+                                   font=("Arial", 12), width=20, height=2, padx=5, pady=5)
+        self.chat_window.grid(row=0, column=0, padx=5, pady=5)
+
+        self.btn = ttk.Button(self, text="Test", command=self.btn_click)
+        self.btn.grid(row=1, column=0, padx=5, pady=5)
+
+        # Use CTkButton instead of tkinter Button
+        button = ctk.CTkButton(master=self, corner_radius=6)
+        button.grid(row=0, column=1, padx=10, pady=10)
+
+        entry = ctk.CTkTextbox(master=self,
+                               width=120,
+                               height=50,
+                               corner_radius=10)
+        entry.grid(row=1, column=1, padx=10, pady=10)
+
+        label = ctk.CTkLabel(master=self,
+                             text="CTkLabel",
+                             width=120,
+                             height=25,
+                             corner_radius=10,
+                             fg_color="#887FFF")
+
+        label.grid(row=2, column=1, padx=10, pady=10)
+
+        notebook = ctk.CTkNotebook(master=self)
+        notebook.grid(row=3, column=1, padx=10, pady=10)
+
+    def btn_click(self):
+        self.btn.configure(text="Test 2")
 
 
-# Function to get the bot response
-def get_response():
-    # Get the bot response
-    response = "I don't understand"
-    # Return the bot response
-    return response
-
-
-# Create a window and configuration
-window = tk.Tk()
-window.title("Messenger")
-window.geometry("400x500")
-window.maxsize(400, 485)
-window.minsize(400, 485)
-
-# Create a frame
-frame = tk.Frame(window)
-frame.pack()
-
-# Create a scrollbar
-scrollbar = ttk.Scrollbar(frame)
-scrollbar.pack(side=RIGHT, fill=Y)
-
-# Create a text box with input
-chat_window = tk.Text(frame, width=55, height=22, yscrollcommand=scrollbar.set)
-chat_window.pack(side=LEFT, fill=BOTH)
-# chat_window.insert(END, "You: " + "\n")
-chat_window.config(font="Verdana", state=DISABLED)
-
-# Create an entry box
-user_input = tk.Entry(window, width=50)
-user_input.pack()
-
-# Create a button to send the message
-send_button = tk.Button(window, text="Send", command=send)
-send_button.pack()
-
-# Create a button
-exit_button = Button(window, text="Exit", command=window.destroy)
-exit_button.pack(pady=20)
-
-# Run the main window loop
-window.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
