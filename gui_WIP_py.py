@@ -41,7 +41,7 @@ frame = tk.Frame(window)
 frame.pack()
 
 # Create a scrollbar
-scrollbar = tk.Scrollbar(frame)
+scrollbar = ttk.Scrollbar(frame)
 scrollbar.pack(side=RIGHT, fill=Y)
 
 # Create a text box with input
