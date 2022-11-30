@@ -4,6 +4,23 @@ import customtkinter as ctk
 from customtkinter import *
 
 
+class Frame1(tk.Frame):
+    def __init__(self, master=None, mytext="Hello World"):
+        super().__init__(master)
+        self.create_widgets(mytext)
+
+    def create_widgets(self, mytext):
+        self.label = tk.Label(self.master, text=mytext, anchor=tk.W)
+        # this is not placed relative to the Frame, but to the
+        # master
+        # 1. How I get the relative coordinates inside the frame
+        #    to be 10, 10 of the frame area?
+        self.label.grid()
+        self.btn = ttk.Button(self.master, text="Test")
+        self.btn.grid(column=1, row=6)
+
+
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -16,6 +33,8 @@ class App(tk.Tk):
 
     def create_widgets(self):
         # create chat window
+        test = Frame1(self, "abc")
+        test.place(x=10, y=10, width=128, height=24)
 
         self.chat_window = tk.Text(self, bg="#000000", fg="#FFFFFF",
                                    font=("Arial", 12), width=20, height=2, padx=5, pady=5)
@@ -42,9 +61,6 @@ class App(tk.Tk):
                              fg_color="#887FFF")
 
         label.grid(row=2, column=1, padx=10, pady=10)
-
-        notebook = ctk.CTkNotebook(master=self)
-        notebook.grid(row=3, column=1, padx=10, pady=10)
 
     def btn_click(self):
         self.btn.configure(text="Test 2")
