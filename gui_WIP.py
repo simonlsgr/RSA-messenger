@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
+
 # Function to send message
 def send():
     chat_window.config(state=NORMAL)
@@ -19,6 +20,7 @@ def send():
         response = get_response()
         # Add the response to the chat window
         chat_window.insert(END, "Bot: " + response + "\n")
+
 
 # Function to get the bot response
 def get_response():
@@ -47,8 +49,7 @@ scrollbar.pack(side=RIGHT, fill=Y)
 chat_window = tk.Text(frame, width=55, height=22, yscrollcommand=scrollbar.set)
 chat_window.pack(side=LEFT, fill=BOTH)
 # chat_window.insert(END, "You: " + "\n")
-chat_window.config(font=("Verdana"), state=DISABLED)
-
+chat_window.config(font="Verdana", state=DISABLED)
 
 # Create an entry box
 user_input = tk.Entry(window, width=50)
