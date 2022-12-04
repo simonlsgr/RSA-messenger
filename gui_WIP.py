@@ -1,71 +1,71 @@
 import tkinter as tk
+from tkinter import *
 from tkinter import ttk
-
 import customtkinter as ctk
+import functools
 
 
-class Frame1(tk.Frame):
-    def __init__(self, master=None, mytext="Hello World"):
+window_height = 550
+window_width = 800
+
+
+# Frame in whin is the chat
+class ChatFrame(ctk.CTkFrame):
+    def __init__(self, master=None):
         super().__init__(master)
-        self.create_widgets(mytext)
+        self.create_widgets()
+        self.configure(fg_color="#28192e", border_color="#3e325d", border_width=1, corner_radius=0, width=800-260)
 
-    def create_widgets(self, mytext):
-        self.label = tk.Label(self.master, text=mytext, anchor=tk.W)
-        # this is not placed relative to the Frame, but to the
-        # master
-        # 1. How I get the relative coordinates inside the frame
-        #    to be 10, 10 of the frame area?
-        self.label.grid()
-        self.btn = ttk.Button(self.master, text="Test")
-        self.btn.grid(column=1, row=6)
-        # test
+    def create_widgets(self):
+        pass
 
 
-class App(tk.Tk):
+# Frame in which is the chat list
+class Conversation_List(ctk.CTkFrame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.create_widgets()
+        self.configure(fg_color="#1f192e", border_color="#3e325d", border_width=2, corner_radius=0, width=260)
+
+    def func(name):
+        print(name)
+
+    def create_widgets(self):
+        self.conversation_header = ctk.CTkLabel(self, text="Conversation_Buttons", text_font=("Arial", 16, "bold"))
+        self.conversation_header.pack(side="top", fill="x", pady=5, padx=10)
+
+        self.canvas_container = Canvas(self, height=100)
+        self.frame2 = ctk.CTkFrame(self)
+        #self.scrollbar = ttk.Scrollbar(self.frame2, orient="vertical", command=self.canvas_container.yview)
+        #self.scrollbar.pack(side="right", fill=Y)
+        self.canvas_container.create_window((0, 0), window=self.frame2, anchor='nw')
+
+        self.mylist = ['item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9']
+        for item in self.mylist:
+            self.button = ttk.Button(self.frame2, text=item)
+            self.button.pack()
+
+
+# Class for main Window
+class Main_Window(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("Test")
-        self.geometry("400x400")
+        self.title("Messenger")
+        self.geometry("800x550+310+100")
         self.resizable(False, False)
-        self.configure(bg="#000000")
+        self.configure(bg="#28192e")
         self.create_widgets()
 
     def create_widgets(self):
-        # create chat window
-        test = Frame1(self, "abc")
-        test.place(x=10, y=10, width=128, height=24)
+        chat_window = ChatFrame(self)
+        chat_window.pack(side="right", fill=tk.BOTH, expand=False)
 
-        self.chat_window = tk.Text(self, bg="#000000", fg="#FFFFFF",
-                                   font=("Arial", 12), width=20, height=2, padx=5, pady=5)
-        self.chat_window.grid(row=0, column=0, padx=5, pady=5)
+        conversation_list = Conversation_List(self)
+        conversation_list.pack(side="left", fill=tk.BOTH, expand=False)
 
-        self.btn = ttk.Button(self, text="Test", command=self.btn_click)
-        self.btn.grid(row=1, column=0, padx=5, pady=5)
-
-        # Use CTkButton instead of tkinter Button
-        button = ctk.CTkButton(master=self, corner_radius=6)
-        button.grid(row=0, column=1, padx=10, pady=10)
-
-        entry = ctk.CTkTextbox(master=self,
-                               width=120,
-                               height=50,
-                               corner_radius=10)
-        entry.grid(row=1, column=1, padx=10, pady=10)
-
-        label = ctk.CTkLabel(master=self,
-                             text="CTkLabel",
-                             width=120,
-                             height=25,
-                             corner_radius=10,
-                             fg_color="#887FFF")
-
-        label.grid(row=2, column=1, padx=10, pady=10)
-
-    def btn_click(self):
-        self.btn.configure(text="Test 2")
 
 
 if __name__ == "__main__":
-    app = App()
+    app = Main_Window()
     app.mainloop()

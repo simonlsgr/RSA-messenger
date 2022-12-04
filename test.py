@@ -1,52 +1,39 @@
-from tkinter import *
-from tkinter.ttk import Notebook
+import functools
+
+try:
+    from tkinter import *
+    import tkinter as tk
+except ImportError:
+    from Tkinter import *
+    import Tkinter as tk  #
+
+window = Tk()
+frame_container = Frame(window)
+
+canvas_container = Canvas(frame_container, height=100)
+frame2 = Frame(canvas_container)
+myscrollbar = Scrollbar(frame_container, orient="vertical",
+                        command=canvas_container.yview)  # will be visible if the frame2 is to to big for the canvas
+canvas_container.create_window((0, 0), window=frame2, anchor='nw')
 
 
-class MyFrame1(Frame):
-    def __init__(self, master=None, mytext=""):
-        super().__init__(master)
-        self.create_widgets(mytext)
-
-    def create_widgets(self, mytext):
-        self.label = Label(self.master, text=mytext, anchor=W)
-        # this is not placed relative to the Frame, but to the
-        # master
-        # 1. How I get the relative coordinates inside the frame
-        #    to be 10, 10 of the frame area?
-        self.label.place(x=10, y=10, width=128, height=24)
+def func(name):
+    print(name)
 
 
-class MyNotebook(Notebook):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.create_widgets()
+mylist = ['item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9']
+for item in mylist:
+    button = Button(frame2, text=item, command=functools.partial(func, item))
+    button.pack()
 
-    def create_widgets(self):
-        self.f1 = MyFrame1(self, "abc")
-        # once the UI is drawn, the label "def" seems to overlay
-        # "abc" even when "f1" is selected
-        # 2. Why is self.f2 always shown even when self.f1 is
-        #    selected?
-        self.f2 = MyFrame1(self, "def")
-        self.add(self.f1, text="f1")
-        self.add(self.f2, text="f2")
-        # Without this command nothing gets drawn
-        # 3. Why is this? Is this equivalent of 'pack' but for
-        #    pixel driven layout?
-        self.place(width=640, height=480)
+frame2.update()  # update frame2 height so it's no longer 0 ( height is 0 when it has just been created )
+canvas_container.configure(yscrollcommand=myscrollbar.set,
+                           scrollregion="0 0 0 %s" % frame2.winfo_height())  # the scrollregion mustbe the size of the frame inside it,
+# in this case "x=0 y=0 width=0 height=frame2height"
+# width 0 because we only scroll verticaly so don't mind about the width.
 
+canvas_container.pack(side=LEFT)
+myscrollbar.pack(side=RIGHT, fill=Y)
 
-def main():
-    root = Tk()
-    root.minsize(640, 480)
-    root.geometry("640x480")
-    app = MyNotebook(master=root)
-    # this works as intended the label is indeed placed
-    # in the frame at 10, 10
-    # app = MyFrame1(master=root, mytext="123abc")
-    app.mainloop()
-    return None
-
-
-if __name__ == "__main__":
-    main()
+frame_container.pack()
+window.mainloop()
