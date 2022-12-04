@@ -6,9 +6,11 @@ import customtkinter as ctk
 window_height = 550
 window_width = 800
 
-conversations = ['item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9', 'item10', 'item11']
+conversations = ['Klaus', 'Peter', 'Julia', 'Paul', 'Simon', 'Gustav', 'Gruppenchat', 'BesteGruppe', 'BackGroup',
+                 'Klassenchat', 'Herbert']
 num_of_conversation = len(conversations)
-messages_from_server = ["message1", "message2", "message3", "message4", "message5", "message6", "message7", "message8"]
+messages_from_server = ["Hi wie geht's, wie steht's?", "wow", "hahah", "Mir geht's ganz gut soweit. Und dir?",
+                        "message5", "message6", "message7", "message8"]
 number_of_messages = len(messages_from_server)
 
 messages_directory = {
@@ -25,37 +27,41 @@ messages_directory = {
 class ChatFrame(ctk.CTkFrame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.create_widgets()
+        self.message_input = ctk.CTkTextbox(self, width=400, height=1)
+        self.message_input.pack(side="bottom", pady=10, padx=5, anchor="se")
+        # Send Button next to the message input
+        self.btn_send = ctk.CTkButton(self, text="Send", width=30, height=30)
+        self.btn_send.pack(side="bottom", pady=10, padx=5, anchor="se")
+
+        MessageLabel(self, conversations[0], conversations[0])
         self.configure(fg_color="#28192e",
                        border_color="#3e325d",
                        border_width=1,
                        corner_radius=0,
                        width=800 - 260)
 
-    def create_widgets(self):
-        MessageFrame(self, conversations[0])
-        pass
+        # MessageFrame(self, conversations[0])
 
 
-class MessageFrame:
+class MessageFrame():
     def __init__(self, parent, conversation):
         self.conversation_title = ctk.CTkLabel(parent, text="Chat with: " + conversation,
-                                               text_font=("Arial", 18, "bold"), width=260)
+                                               text_font=("Arial", 18, "bold"), width=519)
         self.conversation_title.pack(side="top", fill="x", pady=6, padx=10, anchor="n")
         pass
 
 
 class MessageLabel(MessageFrame):
     # display chat messages
-    def __init__(self, parent, chat_partner, conversation, color="#1f192e"):
-        super().__init__(parent)
+    def __init__(self, parent, chat_partner, conversation, color="#453847"):
+        super().__init__(parent, conversation)
         self.parent = parent
         self.color = color
         self.chat_partner = chat_partner
         self.conversation = conversation
 
-        self.canv = ctk.CTkCanvas(self.parent, bg=self.color)
-        self.canv.config(width=300, height=200)
+        self.canv = ctk.CTkCanvas(self.parent, bg="#28192e")
+        self.canv.config(width=200, height=200)
 
         # scrollregion has to be larger than canvas size
         # otherwise it just stays in the visible canvas
@@ -73,30 +79,30 @@ class MessageLabel(MessageFrame):
 
         for msg in messages_from_server:
             self.msg = msg
-            message_ready = self.chat_partner + ": " + self.msg
-            self.message_frame = ctk.CTkFrame(self.canv, width=960, height=100, fg_color="#1f192e")
+            self.message_ready = self.chat_partner + ": " + self.msg
+            self.message_frame = ctk.CTkFrame(self.canv, width=960, height=100, fg_color="#28192e")
 
-            self.message_user = ctk.CTkLabel(self.message_frame, text=message_ready, text_font=("Arial", 12, "bold"),
-                                             fg_color=self.color, width=800 - 260, anchor="e")
-            self.message_user.grid(column=1, pady=6, padx=10, anchor="e")
+            self.message_user = ctk.CTkLabel(self.message_frame, text=self.message_ready,
+                                             text_font=("Arial", 12, "bold"),
+                                             fg_color=self.color, width=100, anchor="e")
+            self.message_user.grid(pady=6, padx=10)
 
 
 # Frame in which is the conversation list
 class Conversation_List(ctk.CTkFrame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.create_widgets()
+
+        self.conversation_list_header = ctk.CTkLabel(self, text="Conversations", text_font=("Arial", 18, "bold"),
+                                                     width=260)
+        self.conversation_list_header.pack(side="top", fill="x", pady=6, padx=10, anchor="n")
+        Conversation_Buttons(self)
+
         self.configure(fg_color="#1f192e",
                        border_color="#3e325d",
                        border_width=2,
                        corner_radius=0,
                        width=260)
-
-    def create_widgets(self):
-        self.conversation_list_header = ctk.CTkLabel(self, text="Conversations", text_font=("Arial", 18, "bold"),
-                                                     width=260)
-        self.conversation_list_header.pack(side="top", fill="x", pady=6, padx=10, anchor="n")
-        Conversation_Buttons(self)
 
 
 class Conversation_Buttons:
@@ -109,22 +115,29 @@ class Conversation_Buttons:
 
         # scrollregion has to be larger than canvas size
         # otherwise it just stays in the visible canvas
-        self.canv.config(scrollregion=(0, 0, 300, num_of_conversation * 62))
-        self.canv.config(highlightthickness=0)
+        if num_of_conversation > 8:
+            self.canv.config(scrollregion=(0, 0, 300, num_of_conversation * 62))
+            self.canv.config(highlightthickness=0)
 
-        self.ybar = ttk.Scrollbar(self.parent)
-        self.ybar.config(command=self.canv.yview)
-        # connect the two widgets together
-        self.canv.config(yscrollcommand=self.ybar.set)
-        self.ybar.pack(side=RIGHT, fill=Y)
+            self.ybar = ttk.Scrollbar(self.parent)
+            self.ybar.config(command=self.canv.yview)
+            # connect the two widgets together
+            self.canv.config(yscrollcommand=self.ybar.set)
+            self.ybar.pack(side=RIGHT, fill=Y)
         self.canv.pack(side=LEFT, expand=YES, fill=BOTH)
 
-        for ctr in range(num_of_conversation):
+        for i, cvs in enumerate(conversations):
             self.conversations_frame = ctk.CTkFrame(self.canv, width=960, height=100, fg_color="#1f192e")
-            self.chats = ctk.CTkButton(self.conversations_frame, text="Chat #" + str(ctr + 1), width=230, height=50,
+            self.chats = ctk.CTkButton(self.conversations_frame, text=cvs, width=230, height=50,
                                        corner_radius=5, border_width=2, fg_color="#453847",
-                                       text_font=("Arial", 16, "bold")).grid()
-            self.canv.create_window(10, 3 + (62 * ctr), anchor=NW, window=self.conversations_frame)
+                                       text_font=("Arial", 16, "bold"), command=lambda: change_chat()).grid()
+            self.canv.create_window(10, 3 + (62 * i), anchor=NW, window=self.conversations_frame)
+
+        # TODO: Function to add new conversation
+        # Function when clicked on a conversation to change the chat
+        def change_chat():
+
+            pass
 
 
 # Class for main Window
