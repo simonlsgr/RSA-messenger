@@ -1,0 +1,12 @@
+- Wir müssen das so machen, dass jeder Conversation button einen neuen Frame (Message Frame) auf den großen gesamten ChatFrame draufklatscht
+
+- Chatspeicher als Directory und so abspeichern, dass das Datum der Hauptspeicher Zugriff ist:
+
+    messages_directory = {
+        "conversation": {
+            "date": {
+                "user":
+                    "message"
+            }
+        }
+    }
