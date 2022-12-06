@@ -10,6 +10,8 @@ today = datetime.today().strftime("%d/%m/%Y %H:%M Uhr")
 
 print("Today's date:", today)
 
+global chat_window
+global conversation_list
 
 window_height = 550
 window_width = 800
@@ -20,7 +22,6 @@ num_of_conversation = len(conversations)
 messages_from_server = ["Hi wie geht's, wie steht's?", "wow", "hahah", "Mir geht's ganz gut soweit. Und dir?",
                         "123456789012345678901234567890123456789012345678901234567890", "message6", "message7",
                         "message8", "message9", "message10", "message11", "message12", "message13", "message14"]
-global number_of_messages
 number_of_messages = len(messages_from_server)
 
 messages_directory_showcase = {
@@ -41,6 +42,9 @@ messages_directory = {
     }
 }
 
+# variable that stores the current conversation
+current_conversation = "conversation"
+
 
 # Method to display messages in the console when clicked
 def message_clicked(msg_index):
@@ -49,14 +53,21 @@ def message_clicked(msg_index):
 
 # Method to display the choosen conversation in the chat frame
 def display_conversation(conversation_index):
-    print(conversation_index)
+    global current_conversation
+    current_conversation = conversations[conversations.index(conversation_index)]
+    print(current_conversation)
+    chat_window.update()
+    conversation_list.update()
+    #
 
 
 # Method to send a message
-def send_message(msg_frame, message, entry):
-    print(entry.get())
+def send_message(msg_frame, entry):
+    message = entry.get()
+    print(message)
     entry.delete(0, 'end')
-    pass
+    print(msg_frame.get_conversation())
+
 # TODO: Send button muss den MessageFrame mit übergeben (method(self)) und dann dadurch kann abgefangen werden,
 # welche Conversation sich gerade offen befindet
 
@@ -66,7 +77,7 @@ class ChatFrame(ctk.CTkFrame):
     def __init__(self, master=None, color="#28192e"):
         super().__init__(master, bg_color=color, fg_color=color, bg=color)
 
-        self.conversation_title = ctk.CTkLabel(self, text="Chat with: " + conversations[0],
+        self.conversation_title = ctk.CTkLabel(self, text="Chat with: " + current_conversation,
                                                text_font=("Arial", 22, "bold"), width=519, height=40,
                                                bg_color=color, fg_color=color)
         self.conversation_title.pack(side="top", fill="both", anchor="w")
@@ -91,11 +102,12 @@ class ChatFrame(ctk.CTkFrame):
         self.msg_send_btn.grid(column=1, row=0, pady=10, padx=8)
 
 
-class MessageFrame():
+class MessageFrame:
 
-    def __init__(self, parent, color="#28192e", *args, **kwargs):
+    def __init__(self, parent, color="#28192e", conversation=current_conversation, *args, **kwargs):
         super().__init__(*args, **kwargs)
         global number_of_messages
+        self.conversation = conversation
 
         self.canv = ctk.CTkCanvas(parent, bg=color)
         self.canv.config(width=525, height=100)
@@ -136,6 +148,9 @@ class MessageFrame():
                                          hover=False, fg_color="#1f192e").grid(sticky="w")
                 self.canv.create_window(20, 10 + (50 * i) + self.abstand, anchor=NW, window=self.frm)
         self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 47))
+
+    def get_conversation(self):
+        return self.conversation
 
 
 # Frame in which is the conversation list
@@ -199,6 +214,9 @@ class Main_Window(tk.Tk):
         self.create_widgets()
 
     def create_widgets(self):
+        global chat_window
+        global conversation_list
+
         chat_window = ChatFrame(self)
         chat_window.pack(side="right", fill=tk.BOTH, expand=False)
 
