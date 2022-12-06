@@ -10,8 +10,9 @@ conversations = ['Klaus', 'Peter', 'Julia', 'Paul', 'Simon', 'Gustav', 'Gruppenc
                  'Klassenchat', 'Herbert']
 num_of_conversation = len(conversations)
 messages_from_server = ["Hi wie geht's, wie steht's?", "wow", "hahah", "Mir geht's ganz gut soweit. Und dir?",
-                        "message5", "message6", "message7", "message8", "message9", "message10", "message11",
-                        "message12"]
+                        "123456789012345678901234567890123456789012345678901234567890", "message6", "message7",
+                        "message8", "message9", "message10", "message11", "message12"]
+global number_of_messages
 number_of_messages = len(messages_from_server)
 
 messages_directory = {
@@ -54,9 +55,15 @@ def message_clicked(msg_index):
     print(msg_index)
 
 
+# Method to display the choosen conversation in the chat frame
+def display_conversation(conversation_index):
+    print(conversation_index)
+
+
 class MessageFrame:
 
     def __init__(self, parent, color="#28192e"):
+        global number_of_messages
 
         self.canv = ctk.CTkCanvas(parent, bg=color)
         self.canv.config(width=525, height=100)
@@ -72,15 +79,29 @@ class MessageFrame:
             self.canv.config(yscrollcommand=self.ybar.set)
             self.ybar.pack(side=RIGHT, fill=Y)
         self.canv.pack(side=LEFT, expand=YES, fill=BOTH)
+        self.abstand = 0
 
         for i, msg in enumerate(messages_from_server):
             self.msg = msg
-            self.frm = ctk.CTkFrame(parent, width=960, height=100, bg=color, bd=0)
-            self.msg = ctk.CTkButton(self.frm, text=msg, corner_radius=25, bg_color=color,
-                                     command=lambda msg=msg: message_clicked(msg),
-                                     border_color="#453847", border_width=2,
-                                     hover=False, fg_color="#1f192e").pack()
-            self.canv.create_window(20, 10 + (50 * i), anchor=NW, window=self.frm)
+
+            if len(self.msg) > 40:
+                number_of_messages += 1
+                self.frm = ctk.CTkFrame(parent, width=960, height=100, bg=color, bd=0)
+                msg = self.msg[:40] + "\n" + self.msg[40:]
+                self.msg = ctk.CTkButton(self.frm, text=msg, corner_radius=15, bg_color=color,
+                                         command=lambda msg_=self.msg: message_clicked(msg_),
+                                         border_color="#453847", border_width=2,
+                                         hover=False, fg_color="#1f192e").grid(sticky="w")
+                self.canv.create_window(20, 10 + (50 * i), anchor=NW, window=self.frm)
+
+                self.abstand += 14
+            else:
+                self.frm = ctk.CTkFrame(parent, width=960, height=100, bg=color, bd=0)
+                self.msg = ctk.CTkButton(self.frm, text=msg, corner_radius=25, bg_color=color,
+                                         command=lambda msg_=self.msg: message_clicked(msg_),
+                                         border_color="#453847", border_width=2,
+                                         hover=False, fg_color="#1f192e").grid(sticky="w")
+                self.canv.create_window(20, 10 + (50 * i) + self.abstand, anchor=NW, window=self.frm)
 
 
 # Frame in which is the conversation list
@@ -122,17 +143,14 @@ class Conversation_Buttons:
         self.canv.pack(side=LEFT, expand=YES, fill=BOTH)
 
         for i, cvs in enumerate(conversations):
+            self.cvs = cvs
             self.conversations_frame = ctk.CTkFrame(self.canv, width=960, height=100, fg_color="#1f192e")
-            self.chats = ctk.CTkButton(self.conversations_frame, text=cvs, width=230, height=50,
-                                       corner_radius=5, border_width=2, fg_color="#453847",
-                                       text_font=("Arial", 16, "bold"), command=lambda: change_chat()).grid()
+            self.chats = ctk.CTkButton(self.conversations_frame, text=cvs, width=230, height=50, corner_radius=5,
+                                       border_width=2, fg_color="#453847", text_font=("Arial", 16, "bold"),
+                                       command=lambda cvs_=cvs: display_conversation(cvs_)).grid()
             self.canv.create_window(10, 3 + (62 * i), anchor=NW, window=self.conversations_frame)
 
         # TODO: Function to add new conversation
-        # Function when clicked on a conversation to change the chat
-        def change_chat():
-
-            pass
 
 
 # Class for main Window
