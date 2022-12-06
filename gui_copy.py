@@ -1,7 +1,15 @@
+import tkinter
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 import customtkinter as ctk
+from datetime import date, datetime
+
+
+today = datetime.today().strftime("%d/%m/%Y %H:%M Uhr")
+
+print("Today's date:", today)
+
 
 window_height = 550
 window_width = 800
@@ -11,9 +19,18 @@ conversations = ['Klaus', 'Peter', 'Julia', 'Paul', 'Simon', 'Gustav', 'Gruppenc
 num_of_conversation = len(conversations)
 messages_from_server = ["Hi wie geht's, wie steht's?", "wow", "hahah", "Mir geht's ganz gut soweit. Und dir?",
                         "123456789012345678901234567890123456789012345678901234567890", "message6", "message7",
-                        "message8", "message9", "message10", "message11", "message12"]
+                        "message8", "message9", "message10", "message11", "message12", "message13", "message14"]
 global number_of_messages
 number_of_messages = len(messages_from_server)
+
+messages_directory_showcase = {
+    "conversation": {
+        "date": {
+            "user":
+                "message"
+        }
+    }
+}
 
 messages_directory = {
     "conversation": {
@@ -23,31 +40,6 @@ messages_directory = {
         }
     }
 }
-
-
-# Frame in which is the chat
-class ChatFrame(ctk.CTkFrame):
-    def __init__(self, master=None, color="#28192e"):
-        super().__init__(master, bg_color=color, fg_color=color, bg=color)
-
-        self.conversation_title = ctk.CTkLabel(self, text="Chat with: " + conversations[0],
-                                               text_font=("Arial", 22, "bold"), width=519, height=40,
-                                               bg_color=color, fg_color=color)
-        self.conversation_title.pack(side="top", fill="both", anchor="w")
-
-        self.msg_send_frame = ctk.CTkFrame(self, width=540, height=100, bg_color=color)
-        self.msg_send_frame.pack(side="bottom", fill="x", pady=10, padx=20, anchor="sw")
-
-        self.message_input = ctk.CTkTextbox(self.msg_send_frame, width=400, height=1)
-        self.message_input.grid(column=0, row=0, pady=10, padx=10)
-
-        self.btn_send = ctk.CTkButton(self.msg_send_frame, text="Send", width=10, height=29)
-        self.btn_send.grid(column=1, row=0, pady=10, padx=8)
-
-        self.messages_frame = ctk.CTkFrame(self, width=540, height=400, bg_color=color)
-        self.messages_frame.pack(side="right", fill="both", anchor="e")
-
-        MessageFrame(self.messages_frame)
 
 
 # Method to display messages in the console when clicked
@@ -60,9 +52,49 @@ def display_conversation(conversation_index):
     print(conversation_index)
 
 
-class MessageFrame:
+# Method to send a message
+def send_message(msg_frame, message, entry):
+    print(entry.get())
+    entry.delete(0, 'end')
+    pass
+# TODO: Send button muss den MessageFrame mit übergeben (method(self)) und dann dadurch kann abgefangen werden,
+# welche Conversation sich gerade offen befindet
 
-    def __init__(self, parent, color="#28192e"):
+
+# Frame in which is the chat
+class ChatFrame(ctk.CTkFrame):
+    def __init__(self, master=None, color="#28192e"):
+        super().__init__(master, bg_color=color, fg_color=color, bg=color)
+
+        self.conversation_title = ctk.CTkLabel(self, text="Chat with: " + conversations[0],
+                                               text_font=("Arial", 22, "bold"), width=519, height=40,
+                                               bg_color=color, fg_color=color)
+        self.conversation_title.pack(side="top", fill="both", anchor="w")
+
+        self.msg_send_frame = ctk.CTkFrame(self, width=520, height=100, bg_color=color)
+        self.msg_send_frame.pack(side="bottom", pady=10, padx=20, anchor="sw")
+
+        self.message_input = ctk.CTkEntry(self.msg_send_frame, width=400, height=30)
+        # self.message_input = ctk.CTkTextbox(self.msg_send_frame, width=400, height=1)
+        self.message_input.grid(column=0, row=0, pady=10, padx=10)
+
+        self.message_input.insert(0, "Type your message here")
+
+        self.messages_frame = ctk.CTkFrame(self, width=540, height=400, bg_color=color)
+        self.messages_frame.pack(side="right", fill="both", anchor="e")
+
+        self.msg_frame_class = MessageFrame(self.messages_frame)
+
+        self.msg_send_btn = ctk.CTkButton(self.msg_send_frame, text="Send", width=10, height=29,
+                                          command=lambda msg_input=self.message_input.get(): send_message(self.msg_frame_class,
+                                                                                                          self.message_input))
+        self.msg_send_btn.grid(column=1, row=0, pady=10, padx=8)
+
+
+class MessageFrame():
+
+    def __init__(self, parent, color="#28192e", *args, **kwargs):
+        super().__init__(*args, **kwargs)
         global number_of_messages
 
         self.canv = ctk.CTkCanvas(parent, bg=color)
@@ -72,7 +104,7 @@ class MessageFrame:
         # otherwise it just stays in the visible canvas
         self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 50))
         self.canv.config(highlightthickness=0)
-        if number_of_messages > 9:
+        if number_of_messages > 7:
             self.ybar = ttk.Scrollbar(parent)
             self.ybar.config(command=self.canv.yview)
             # connect the two widgets together
@@ -84,6 +116,7 @@ class MessageFrame:
         for i, msg in enumerate(messages_from_server):
             self.msg = msg
 
+            # if the message is longer than 40 characters, it will be split into two lines
             if len(self.msg) > 40:
                 number_of_messages += 1
                 self.frm = ctk.CTkFrame(parent, width=960, height=100, bg=color, bd=0)
@@ -102,6 +135,7 @@ class MessageFrame:
                                          border_color="#453847", border_width=2,
                                          hover=False, fg_color="#1f192e").grid(sticky="w")
                 self.canv.create_window(20, 10 + (50 * i) + self.abstand, anchor=NW, window=self.frm)
+        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 47))
 
 
 # Frame in which is the conversation list
