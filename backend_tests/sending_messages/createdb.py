@@ -4,7 +4,7 @@ conn = sqlite3.connect('users.db')
 cur = conn.cursor()
 
 cur.execute(""" 
-CREATE TABLE IF NOT EXISTS messager_RAM (
+CREATE TABLE IF NOT EXISTS messages_RAM (
     message_id INTEGER PRIMARY KEY AUTOINCREMENT,
     message VARCHAR(1) NOT NULL,
     receiver_id INTEGER NOT NULL,
@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS messager_RAM (
 )
 """)
 
-cur.execute("INSERT INTO users (message_id, message, receiver_id, sender_id, public_key_rsa, date_sent) VALUES (?, ?, ?, ?, ?, ?)", (1, "Hello", 1, 2, "55 , 7", ))
+cur.execute("INSERT INTO messages_RAM (message, receiver_id, sender_id, public_key_rsa, date_sent) VALUES (?, ?, ?, ?, ?)", ("Hello", 1, 2, "55 , 7", "1970-01-01 00:00:00"))
 conn.commit()
