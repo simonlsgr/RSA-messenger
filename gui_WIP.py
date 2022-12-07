@@ -1,10 +1,9 @@
-import tkinter
 import tkinter as tk
+from datetime import datetime
 from tkinter import *
 from tkinter import ttk
-import customtkinter as ctk
-from datetime import date, datetime
 
+import customtkinter as ctk
 
 today = datetime.today().strftime("%d/%m/%Y %H:%M Uhr")
 
@@ -13,6 +12,8 @@ print("Today's date:", today)
 global chat_window
 global conversation_list
 
+global app
+
 window_height = 550
 window_width = 800
 
@@ -20,8 +21,9 @@ conversations = ['Klaus', 'Peter', 'Julia', 'Paul', 'Simon', 'Gustav', 'Gruppenc
                  'Klassenchat', 'Herbert']
 num_of_conversation = len(conversations)
 messages_from_server = ["Hi wie geht's, wie steht's?", "wow", "hahah", "Mir geht's ganz gut soweit. Und dir?",
-                        "123456789012345678901234567890123456789012345678901234567890", "message6", "message7",
-                        "message8", "message9", "message10", "message11", "message12", "message13", "message14"]
+                        # "123456789012345678901234567890123456789012345678901234567890",
+                        "message6", "message7", "message8", "message9", "message10", "message11", "message12",
+                        "message13", "message14"]
 number_of_messages = len(messages_from_server)
 
 messages_directory_showcase = {
@@ -53,22 +55,39 @@ def message_clicked(msg_index):
 
 # Method to display the choosen conversation in the chat frame
 def display_conversation(conversation_index):
+    global app
     global current_conversation
+    global chat_window
+    global conversation_list
+
     current_conversation = conversations[conversations.index(conversation_index)]
     print(current_conversation)
     chat_window.update()
     conversation_list.update()
-    #
+    app = None
+    app = Main_Window()
+    app.mainloop()
 
 
 # Method to send a message
 def send_message(msg_frame, entry):
+    global app
+    global chat_window
+    global conversation_list
+
     message = entry.get()
     print(message)
+    messages_from_server.append(message)
     entry.delete(0, 'end')
     print(msg_frame.get_conversation())
+    chat_window.update()
+    conversation_list.update()
+    print(messages_from_server)
+    app = None
+    app = Main_Window()
+    app.mainloop()
 
-# TODO: Send button muss den MessageFrame mit übergeben (method(self)) und dann dadurch kann abgefangen werden,
+
 # welche Conversation sich gerade offen befindet
 
 
@@ -114,7 +133,7 @@ class MessageFrame:
 
         # scrollregion has to be larger than canvas size
         # otherwise it just stays in the visible canvas
-        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 50))
+        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 62))
         self.canv.config(highlightthickness=0)
         if number_of_messages > 7:
             self.ybar = ttk.Scrollbar(parent)
@@ -147,7 +166,7 @@ class MessageFrame:
                                          border_color="#453847", border_width=2,
                                          hover=False, fg_color="#1f192e").grid(sticky="w")
                 self.canv.create_window(20, 10 + (50 * i) + self.abstand, anchor=NW, window=self.frm)
-        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 47))
+        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 50))
 
     def get_conversation(self):
         return self.conversation
@@ -225,5 +244,6 @@ class Main_Window(tk.Tk):
 
 
 if __name__ == "__main__":
+    global app
     app = Main_Window()
     app.mainloop()
