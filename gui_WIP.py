@@ -64,7 +64,7 @@ def display_conversation(conversation_index):
     print(current_conversation)
     chat_window.update()
     conversation_list.update()
-    app = None
+    app.destroy()
     app = Main_Window()
     app.mainloop()
 
@@ -83,12 +83,9 @@ def send_message(msg_frame, entry):
     chat_window.update()
     conversation_list.update()
     print(messages_from_server)
-    app = None
+    app.destroy()
     app = Main_Window()
     app.mainloop()
-
-
-# welche Conversation sich gerade offen befindet
 
 
 # Frame in which is the chat
@@ -104,11 +101,12 @@ class ChatFrame(ctk.CTkFrame):
         self.msg_send_frame = ctk.CTkFrame(self, width=520, height=100, bg_color=color)
         self.msg_send_frame.pack(side="bottom", pady=10, padx=20, anchor="sw")
 
-        self.message_input = ctk.CTkEntry(self.msg_send_frame, width=400, height=30)
+        # self.message_input = ctk.CTkEntry(self.msg_send_frame, width=400, height=30)
+        self.message_input = EntryWithPlaceholder(self.msg_send_frame, "Type your message here", 'grey')
         # self.message_input = ctk.CTkTextbox(self.msg_send_frame, width=400, height=1)
         self.message_input.grid(column=0, row=0, pady=10, padx=10)
 
-        self.message_input.insert(0, "Type your message here")
+        # self.message_input.insert(0, "Type your message here")
 
         self.messages_frame = ctk.CTkFrame(self, width=540, height=400, bg_color=color)
         self.messages_frame.pack(side="right", fill="both", anchor="e")
@@ -126,6 +124,7 @@ class MessageFrame:
     def __init__(self, parent, color="#28192e", conversation=current_conversation, *args, **kwargs):
         super().__init__(*args, **kwargs)
         global number_of_messages
+        number_of_messages = len(messages_from_server)
         self.conversation = conversation
 
         self.canv = ctk.CTkCanvas(parent, bg=color)
@@ -133,7 +132,7 @@ class MessageFrame:
 
         # scrollregion has to be larger than canvas size
         # otherwise it just stays in the visible canvas
-        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 62))
+        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 60))
         self.canv.config(highlightthickness=0)
         if number_of_messages > 7:
             self.ybar = ttk.Scrollbar(parent)
@@ -166,7 +165,8 @@ class MessageFrame:
                                          border_color="#453847", border_width=2,
                                          hover=False, fg_color="#1f192e").grid(sticky="w")
                 self.canv.create_window(20, 10 + (50 * i) + self.abstand, anchor=NW, window=self.frm)
-        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 50))
+        self.canv.config(scrollregion=(0, 0, 200, number_of_messages * 60))
+        self.canv.yview_moveto(1)
 
     def get_conversation(self):
         return self.conversation
@@ -219,6 +219,33 @@ class Conversation_Buttons:
             self.canv.create_window(10, 3 + (62 * i), anchor=NW, window=self.conversations_frame)
 
         # TODO: Function to add new conversation
+
+
+class EntryWithPlaceholder(tk.Entry):
+    def __init__(self, master=None, placeholder="PLACEHOLDER", color='grey'):
+        super().__init__(master)
+
+        self.placeholder = placeholder
+        self.placeholder_color = color
+        self.default_fg_color = self['fg']
+
+        self.bind("<FocusIn>", self.foc_in)
+        self.bind("<FocusOut>", self.foc_out)
+
+        self.put_placeholder()
+
+    def put_placeholder(self):
+        self.insert(0, self.placeholder)
+        self['fg'] = self.placeholder_color
+
+    def foc_in(self, *args):
+        if self['fg'] == self.placeholder_color:
+            self.delete('0', 'end')
+            self['fg'] = self.default_fg_color
+
+    def foc_out(self, *args):
+        if not self.get():
+            self.put_placeholder()
 
 
 # Class for main Window
