@@ -8,14 +8,14 @@ class rsa():
         self.message = message
     
     def encrypt(self):
-        key = self.load_key()
+        key = self.load_public_key()
         message_encrypted = []
         for i in self.message:
            message_encrypted.append(pow(int(i), key["a"], key["n"]))
         return message_encrypted
 
     def decrypt(self):
-        key = self.load_key()
+        key = self.load_private_key()
         message_decrypted = []
         b = self.extended_euclidean_algorithm([key["m"], 1, 0], [key["a"] , 0, 1])
         for i in self.message:
@@ -23,11 +23,21 @@ class rsa():
         
         return message_decrypted
         
-    
-    def load_key(self):
+    def load_public_key(self):
+        key = ""
+        with open("backend_tests/RSA/key/public_keys.json", "r") as f:
+            key = f.read()
+        key = json.loads(key)
+
+        for i in key:
+            if i["n"] == self.key_n:
+                return i
+        return ValueError("Key not found")
+
+    def load_private_key(self):
 
         key = ""
-        with open("backend_tests/RSA/key/private_key.json", "r") as f:
+        with open("backend_tests/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         
@@ -131,7 +141,7 @@ if __name__ == "__main__":
     # message = int(input("Message: "))
     message = [813, 41234 , 23, 8]
     # rsa(message).generate_key()
-    print(rsa(key_n=55).load_key())
-    y = rsa(message=message, key_n=55).encrypt()
-    x = rsa(message=y, key_n=55).decrypt()
+    print(rsa(key_n=55).load_public_key())
+    y = rsa(message=message, key_n=30519548451880718516112605203).encrypt()
+    x = rsa(message=y, key_n=30519548451880718516112605203).decrypt()
     print(y, x)
