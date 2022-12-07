@@ -13,4 +13,18 @@ class customAES:
 
     def decrypt(self, ciphertext, tag):
         self.cipher = AES.new(self.key, AES.MODE_EAX, self.nonce)
-        return self.cipher.decrypt_and_verify(ciphertext, tag)
+        plaintext = self.cipher.decrypt(ciphertext)
+        try:
+            self.cipher.verify(tag)
+            return plaintext
+        except ValueError:
+            return "Key incorrect or message corrupted"
+
+if __name__ == "__main__":
+    message = "Test Message".encode("utf-8")
+    decryption_info = customAES().encrypt(message)
+    print(decryption_info)
+    encryption_info = customAES().decrypt(decryption_info["ciphertext"], decryption_info["tag"])
+    print(encryption_info)
+    
+    
