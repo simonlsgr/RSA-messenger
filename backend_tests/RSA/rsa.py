@@ -3,18 +3,15 @@ import numpy as np
 import json
 
 class rsa():
-    def __init__(self, message):
-        try:
-            self.message = int(message)
-        except:
-            self.message = message
+    def __init__(self, message=None, key_n=None):
+        self.key_n = key_n
+        self.message = message
     
-    def encrypt(self, message):
+    def encrypt(self):
         key = self.load_key()
         message_encrypted = []
-        message_buffer = str(self.message)
-        for i in message_buffer:
-            message_encrypted.append(pow(int(i), key["a"], key["n"]))
+        for i in self.message:
+           message_encrypted.append(pow(int(i), key["a"], key["n"]))
         return message_encrypted
 
     def decrypt(self):
@@ -24,29 +21,37 @@ class rsa():
         for i in self.message:
             message_decrypted.append(pow(int(i), b, key["n"]))
         
-        try:
-            return int("".join(map(str, message_decrypted)))
-        except:
-            return message_decrypted
+        return message_decrypted
         
     
     def load_key(self):
+
         key = ""
         with open("backend_tests/RSA/key/private_key.json", "r") as f:
             key = f.read()
         key = json.loads(key)
-        return key
+        
+        for i in key:
+            if i["n"] == self.key_n:
+                return i
+        return ValueError("Key not found")
+        
     
     def generate_key(self):
         dict = self.generate_p_q_n_m(10, 20)
         dict["a"] = self.generate_coprime(dict["m"])
+        with open("backend_tests/RSA/key/private_key.json", "r") as f:
+            key = f.read()
+        key = json.loads(key)
+        key.append(dict)
+        
+
         with open("backend_tests/RSA/key/private_key.json", "w") as f:
-            json.dump(dict, f)
+            json.dump(key, f)
 
     
     
     def is_prime_MRT(self, p, k):
-        c = 0
         while k > 0:
             if self.Miller_Rabin_test(p) == False:
                 return False
@@ -123,9 +128,10 @@ class rsa():
 
     
 if __name__ == "__main__":
-    message = int(input("Message: "))
+    # message = int(input("Message: "))
+    message = [813, 41234 , 23, 8]
     # rsa(message).generate_key()
-    # rsa(message).load_key()
-    y = rsa(message).encrypt(message)
-    x = rsa(y).decrypt()
+    print(rsa(key_n=55).load_key())
+    y = rsa(message=message, key_n=55).encrypt()
+    x = rsa(message=y, key_n=55).decrypt()
     print(y, x)
