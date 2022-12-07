@@ -91,7 +91,7 @@ def send_message(msg_frame, entry):
 # Frame in which is the chat
 class ChatFrame(ctk.CTkFrame):
     def __init__(self, master=None, color="#28192e"):
-        super().__init__(master, bg_color=color, fg_color=color, bg=color)
+        super().__init__(master, bg_color=color, fg_color=color)
 
         self.conversation_title = ctk.CTkLabel(self, text="Chat with: " + current_conversation,
                                                text_font=("Arial", 22, "bold"), width=519, height=40,
