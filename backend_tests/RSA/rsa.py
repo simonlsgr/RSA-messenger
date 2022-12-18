@@ -4,37 +4,47 @@ import json
 
 class rsa():
     def __init__(self, message=None, key_n=None):
-        self.key_n = key_n
-        self.message = message
+        # self.key_n = key_n
+        # self.message = message
+        pass
     
-    def encrypt(self):
-        key = self.load_public_key()
+    def encrypt(self, __message_in_number_format, __public_key_n):
+        message = __message_in_number_format
+        key_n = __public_key_n
+        key = self.load_public_key(key_n)
         message_encrypted = []
-        for i in self.message:
+        for i in message:
            message_encrypted.append(pow(int(i), key["a"], key["n"]))
         return message_encrypted
 
-    def decrypt(self):
-        key = self.load_private_key()
+    def decrypt(self, __message_in_number_format, __private_key_n):
+        message = __message_in_number_format
+        key_n = __private_key_n
+        key = self.load_private_key(key_n)
         message_decrypted = []
         b = self.extended_euclidean_algorithm([key["m"], 1, 0], [key["a"] , 0, 1])
-        for i in self.message:
-            message_decrypted.append(pow(int(i), b, key["n"]))
+        for i in message:
+            if i == 0 or i == 1:
+                message_decrypted.append(i)
+            else:
+                message_decrypted.append(pow(int(i), b, key["n"]))
         
         return message_decrypted
         
-    def load_public_key(self):
+    def load_public_key(self, __key_n):
+        key_n = __key_n
         key = ""
         with open("backend_tests/RSA/key/public_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
 
         for i in key:
-            if i["n"] == self.key_n:
+            if i["n"] == key_n:
                 return i
         return ValueError("Key not found")
 
-    def load_private_key(self):
+    def load_private_key(self, __key_n):
+        key_n = __key_n
 
         key = ""
         with open("backend_tests/RSA/key/private_keys.json", "r") as f:
@@ -42,7 +52,7 @@ class rsa():
         key = json.loads(key)
         
         for i in key:
-            if i["n"] == self.key_n:
+            if i["n"] == key_n:
                 return i
         return ValueError("Key not found")
         
@@ -55,7 +65,6 @@ class rsa():
         key = json.loads(key)
         key.append(dict)
         
-
         with open("backend_tests/RSA/key/private_key.json", "w") as f:
             json.dump(key, f)
 
@@ -140,8 +149,8 @@ class rsa():
 if __name__ == "__main__":
     # message = int(input("Message: "))
     message = [813, 41234 , 23, 8]
-    # rsa(message).generate_key()
-    print(rsa(key_n=55).load_public_key())
-    y = rsa(message=message, key_n=30519548451880718516112605203).encrypt()
-    x = rsa(message=y, key_n=30519548451880718516112605203).decrypt()
+    # rsa(message).generate_key()message=message, key_n=30519548451880718516112605203
+    print(rsa().load_public_key(55))
+    y = rsa().encrypt(message, 30519548451880718516112605203)
+    x = rsa().decrypt(y, 30519548451880718516112605203)
     print(y, x)
