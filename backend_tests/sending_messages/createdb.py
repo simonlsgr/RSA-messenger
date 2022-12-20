@@ -6,10 +6,13 @@ cur = conn.cursor()
 cur.execute(""" 
 CREATE TABLE IF NOT EXISTS messages_RAM (
     message_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    message VARCHAR(1) NOT NULL,
     receiver_id INTEGER NOT NULL,
     sender_id INTEGER NOT NULL,
-    public_key_rsa VARCHAR(255) NOT NULL,
+    encrypted_message VARCHAR(1) NOT NULL,
+    encrypted_symmteric_key VARCHAR(255) NOT NULL,
+    public_key_rsa_n VARCHAR(255) NOT NULL,
+    public_key_rsa_a VARCHAR(255) NOT NULL,
+    
     date_sent DATETIME NOT NULL,
     FOREIGN KEY (receiver_id) REFERENCES users(id),
     FOREIGN KEY (sender_id) REFERENCES users(id)
