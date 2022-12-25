@@ -8,8 +8,8 @@ class rsa():
         # self.message = message
         pass
     
-    def encrypt(self, __message_in_number_format, __public_key_n):
-        message = __message_in_number_format
+    def encrypt(self, __message_in_number_format_list, __public_key_n):
+        message = __message_in_number_format_list
         key_n = __public_key_n
         key = self.load_public_key(key_n)
         message_encrypted = []
@@ -17,8 +17,8 @@ class rsa():
            message_encrypted.append(pow(int(i), key["a"], key["n"]))
         return message_encrypted
 
-    def decrypt(self, __message_in_number_format, __private_key_n):
-        message = __message_in_number_format
+    def decrypt(self, __message_in_number_format_list, __private_key_n):
+        message = __message_in_number_format_list
         key_n = __private_key_n
         key = self.load_private_key(key_n)
         message_decrypted = []
@@ -58,14 +58,14 @@ class rsa():
         
     
     def generate_key(self):
-        dict = self.generate_p_q_n_m(10, 20)
+        dict = self.generate_p_q_n_m(200, 210)
         dict["a"] = self.generate_coprime(dict["m"])
-        with open("backend_tests/RSA/key/private_key.json", "r") as f:
+        with open("backend_tests/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         key.append(dict)
         
-        with open("backend_tests/RSA/key/private_key.json", "w") as f:
+        with open("backend_tests/RSA/key/private_keys.json", "w") as f:
             json.dump(key, f)
 
     
@@ -150,7 +150,9 @@ if __name__ == "__main__":
     # message = int(input("Message: "))
     message = [813, 41234 , 23, 8]
     # rsa(message).generate_key()message=message, key_n=30519548451880718516112605203
-    print(rsa().load_public_key(55))
-    y = rsa().encrypt(message, 30519548451880718516112605203)
-    x = rsa().decrypt(y, 30519548451880718516112605203)
-    print(y, x)
+    keyntemp = 1727905906709714784706338886185660821489624319004546252486521182854131408326175142081155065283964279252264103247644151083170376041033786140063928678466115175854528569915314097064039396917343775112000218116052930220635874998816225153651390803092573075249639100354664945206705779738286705243578126677602991838639634011040225246154771737242342635106992300640238539502668063840304230884412268610826512661571833
+    y = rsa().encrypt(message, keyntemp)
+    x = rsa().decrypt(y, keyntemp)
+    print(y)
+    print(x)
+
