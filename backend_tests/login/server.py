@@ -1,7 +1,7 @@
 import sqlite3
-import hashlib
 import socket
 import threading
+import time
 
 import sys
 sys.path.append("backend_tests")
@@ -17,12 +17,20 @@ server.bind(('localhost', 10001))
 server.listen()
 
 
-def handle_connection(c):
-    c.send("Username: ".encode())
-    username = c.recv(1024).decode()
-    c.send("Password: ".encode())
-    password = c.recv(1024).decode()
-    
+
+def fetch_messages(username, client):
+    conn = sqlite3.connect('backend_tests/users.db')
+    cur = conn.cursor()
+    own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
+    print(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall())
+    client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
+
+def handle_connection(client):
+    ### USER AUTHENTICATION
+    client.send("Username: ".encode())
+    username = client.recv(1024).decode()
+    client.send("Password: ".encode())
+    password = client.recv(1024).decode()
 
     conn = sqlite3.connect('backend_tests/users.db')
     cur = conn.cursor()
@@ -30,20 +38,22 @@ def handle_connection(c):
     cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
 
     if cur.fetchall():
-        c.send("Login successful\n".encode())
-        c.send("fetch messages/send message: \n".encode())
-        function = c.recv(1024).decode()
-        if function == "fetch messages":
-            c.send("fetched messages".encode())
+        client.send("Login successful\nfetch messages(f)/send message(s):\n".encode())
+        
+        function = client.recv(1024).decode()
+        if function == "f":
+            client.send("fetching messages".encode())
             # fetch messages
-        elif function == "send message":
+            fetch_messages(username, client)
+        elif function == "s":
+            client.send("sending message".encode())
             # send message
-            c.send("send message".encode())
         else:
-            c.send("function unkown".encode())
+            client.send("function unkown".encode())
 
     else:
-        c.send("Login failed".encode())
+        client.send("Login failed".encode())
+
 
 
 while True:
