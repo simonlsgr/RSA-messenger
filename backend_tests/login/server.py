@@ -2,8 +2,12 @@ import sqlite3
 import hashlib
 import socket
 import threading
-#import the messages.py file from the backend_tests/sending_messages folder
-import backend_tests.sending_messages.messages as messages
+
+import sys
+sys.path.append("backend_tests")
+from sending_messages.messages import messages
+sys.path.append("backend_tests/sending_messages")
+
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

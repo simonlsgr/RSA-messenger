@@ -1,4 +1,7 @@
-import backend_tests.RSA.rsa as rsa
+import sys
+sys.path.append("backend_tests")
+import RSA.rsa as rsa
+sys.path.append("backend_tests/sending_messages")
 
 class main:
     def __init__(self, message, sender, receiver, key_a):
