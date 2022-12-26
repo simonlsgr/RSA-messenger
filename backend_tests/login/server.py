@@ -5,7 +5,7 @@ import threading
 
 import sys
 sys.path.append("backend_tests")
-from sending_messages.messages import messages
+import sending_messages.messages as messages
 sys.path.append("backend_tests/sending_messages")
 
 
@@ -24,14 +24,23 @@ def handle_connection(c):
     password = c.recv(1024).decode()
     
 
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('backend_tests/users.db')
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
 
     if cur.fetchall():
-        c.send("Login successful".encode())
-        messages.main()
+        c.send("Login successful\n".encode())
+        c.send("fetch messages/send message: \n".encode())
+        function = c.recv(1024).decode()
+        if function == "fetch messages":
+            c.send("fetched messages".encode())
+            # fetch messages
+        elif function == "send message":
+            # send message
+            c.send("send message".encode())
+        else:
+            c.send("function unkown".encode())
 
     else:
         c.send("Login failed".encode())
