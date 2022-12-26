@@ -1,5 +1,10 @@
 import socket
 import hashlib
+import sys
+sys.path.append("backend_tests")
+import backend_main as backend_main
+sys.path.append("backend_tests/login")
+
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('localhost', 10001))
@@ -19,7 +24,13 @@ if option == "f":
 
     print(client.recv(1024).decode())
     fetched_messages = client.recv(4294967296).decode()
-    print(eval(fetched_messages))
+    list_of_tuples_containing_fetched_messages = eval(fetched_messages)
+    list_encrypted_messages = []
+    for i, j in enumerate(list_of_tuples_containing_fetched_messages):
+        for k, l in enumerate(j):
+            print(i, l)
+
+
 
 client.send("".encode())
 
