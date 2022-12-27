@@ -22,8 +22,22 @@ def fetch_messages(username, client):
     conn = sqlite3.connect('backend_tests/users.db')
     cur = conn.cursor()
     own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
-    print(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall())
     client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
+
+    # deleting received messages
+    message_ids_list = client.recv(1024).decode()
+    client.send("ready".encode())
+    username_from_user = client.recv(1024).decode()
+    client.send("ready".encode())
+
+    user_id = cur.execute("SELECT id FROM users WHERE username = ?", (username_from_user, )).fetchall()[0][0]
+
+    for message_id in message_ids_list:
+        cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))
+    conn.commit()
+
+
+
 
 def handle_connection(client):
     ### USER AUTHENTICATION
