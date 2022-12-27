@@ -10,14 +10,14 @@ class main():
         self.symmetric_key = self.aes.key
         self.nonce = self.aes.nonce
     
-    def encrypt(self, message: str, key_n: int):
+    def encrypt(self, message: str, key_n: int, key_a: int):
         encrypted_message = self.aes.encrypt(message.encode("utf-8"))
 
         length_bytes_symmetric_key = len(encrypted_message["key"])
-        encrypted_key = self.rsa.encrypt([int.from_bytes(encrypted_message["key"], "big")], key_n)[0]
+        encrypted_key = self.rsa.encrypt([int.from_bytes(encrypted_message["key"], "big")], key_n, key_a)[0]
 
         length_bytes_nonce = len(self.nonce)
-        encrypted_nonce = self.rsa.encrypt([int.from_bytes(self.nonce, "big")], key_n)[0]
+        encrypted_nonce = self.rsa.encrypt([int.from_bytes(self.nonce, "big")], key_n, key_a)[0]
 
         encrypted_ciphertext_byte_length = len(encrypted_message["ciphertext"])
         tag_byte_length = len(encrypted_message["tag"])

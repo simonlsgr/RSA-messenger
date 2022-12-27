@@ -1,7 +1,7 @@
 import sqlite3
 import socket
 import threading
-import time
+import datetime
 
 import sys
 sys.path.append("backend_tests")
@@ -36,6 +36,33 @@ def fetch_messages(username, client):
         cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))
     conn.commit()
 
+def send_message(username, client):
+    conn = sqlite3.connect('backend_tests/users.db')
+    cur = conn.cursor()
+    own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
+    receiver = client.recv(1024).decode()
+
+    try:
+        receiver_id = cur.execute("SELECT id FROM users WHERE username = ?", (receiver, )).fetchall()[0][0]
+    except:
+        pass
+        # client.send("receiver unkown".encode())
+
+    try:
+        keys = cur.execute("SELECT rsa_key_n, rsa_key_a FROM users WHERE username = ?", (receiver, )).fetchall()[0]
+        client.send(str(keys).encode())
+    except:
+        print("receiver unkown")
+        client.send("receiver unkown".encode())
+    
+    message = eval(client.recv(1024).decode())
+    
+    date = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+    
+    cur.execute("INSERT INTO messages_RAM (receiver_id, sender_id, encrypted_ciphertext, tag, encrypted_ciphertext_byte_length, tag_byte_length, encrypted_symmetric_key, encrypted_nonce, encrypted_symmetric_key_byte_length, encrypted_nonce_byte_length, public_key_rsa_n, date_sent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (receiver_id, own_id,str(message["encrypted_ciphertext"]), str(message["tag"]), str(message["encrypted_ciphertext_byte_length"]), str(message["tag_byte_length"]), str(message["encrypted_key" ]), str(message["encrypted_nonce"]), str(message["encrypted_key_byte_length"]), str(message["encrypted_nonce_byte_length"]), str(keys[0]), date))
+    conn.commit()
+    
+
 
 
 
@@ -57,11 +84,10 @@ def handle_connection(client):
         function = client.recv(1024).decode()
         if function == "f":
             client.send("fetching messages".encode())
-            # fetch messages
             fetch_messages(username, client)
         elif function == "s":
+            send_message(username, client)
             client.send("sending message".encode())
-            # send message
         else:
             client.send("function unkown".encode())
 

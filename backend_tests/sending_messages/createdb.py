@@ -38,5 +38,6 @@ encrypted_nonce_byte_length = "16"
 public_key_rsa_n = "1727905906709714784706338886185660821489624319004546252486521182854131408326175142081155065283964279252264103247644151083170376041033786140063928678466115175854528569915314097064039396917343775112000218116052930220635874998816225153651390803092573075249639100354664945206705779738286705243578126677602991838639634011040225246154771737242342635106992300640238539502668063840304230884412268610826512661571833"
 date_sent = "1970-01-01 00:00:00"
 
+
 cur.execute("INSERT INTO messages_RAM (receiver_id, sender_id, encrypted_ciphertext, tag, encrypted_ciphertext_byte_length, tag_byte_length, encrypted_symmetric_key, encrypted_nonce, encrypted_symmetric_key_byte_length, encrypted_nonce_byte_length, public_key_rsa_n, date_sent)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (receiver_id, sender_id, encrypted_ciphertext, tag, encrypted_ciphertext_byte_length, tag_byte_length, encrypted_symmetric_key, encrypted_nonce, encrypted_symmetric_key_byte_length, encrypted_nonce_byte_length, public_key_rsa_n, date_sent))
 conn.commit()

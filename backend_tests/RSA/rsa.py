@@ -8,13 +8,14 @@ class rsa():
         # self.message = message
         pass
     
-    def encrypt(self, __message_in_number_format_list, __public_key_n):
+    def encrypt(self, __message_in_number_format_list, __public_key_n, __key_a):
         message = __message_in_number_format_list
         key_n = __public_key_n
-        key = self.load_public_key(key_n)
+        key_a = __key_a
+        # key = self.load_public_key(key_n)
         message_encrypted = []
         for i in message:
-           message_encrypted.append(pow(int(i), key["a"], key["n"]))
+           message_encrypted.append(pow(int(i), key_a, key_n))
         return message_encrypted
 
     def decrypt(self, __message_in_number_format_list, __private_key_n):

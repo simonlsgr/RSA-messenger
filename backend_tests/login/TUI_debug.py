@@ -1,17 +1,19 @@
 import socket
 import hashlib
 import sys
+import json
 sys.path.append("backend_tests")
 import backend_main as backend_main
+sys.path.append("backend_tests/RSA")
+import RSA.rsa as rsa
 sys.path.append("backend_tests/login")
-
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('localhost', 10001))
 
 username_in = "Paul"
 password_in = "Paul1234"
-option = "f"
+option = "s"
 
 def delete_from_database(message_id_list: list, client_function: socket.socket, username: str):
     client_function.send(str(message_id_list).encode())
@@ -63,7 +65,19 @@ def fetch_messages(client_function: socket.socket, username_function: str):
         print(f.read())
 
 def send_message(client_function: socket.socket, username_function: str):
-    message = input()
+    client_function.send("s".encode())
+    message = input("Enter message: ")
+    receiver = input("Enter receiver (username): ")
+    client_function.send(receiver.encode())
+    key_n, key_a = eval(client_function.recv(1024).decode())
+    key_n = int(key_n)
+    key_a = int(key_a)
+    
+    encrypted_message = backend_main.main().encrypt(message, key_n, key_a)
+    client_function.send(str(encrypted_message).encode())
+
+
+
 
 
 username_request = client.recv(1024).decode()
