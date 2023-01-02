@@ -18,7 +18,7 @@ class customAES:
             cipher_decrypt.verify(tag)
             return plaintext
         except ValueError:
-            return "Key incorrect or message corrupted"
+            return "Key incorrect or message corrupted".encode("utf-8")
 
 if __name__ == "__main__":
     message = "Test Message".encode("utf-8")

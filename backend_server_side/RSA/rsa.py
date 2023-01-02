@@ -4,15 +4,12 @@ import json
 
 class rsa():
     def __init__(self, message=None, key_n=None):
-        # self.key_n = key_n
-        # self.message = message
         pass
     
     def encrypt(self, __message_in_number_format_list, __public_key_n, __key_a):
         message = __message_in_number_format_list
         key_n = __public_key_n
         key_a = __key_a
-        # key = self.load_public_key(key_n)
         message_encrypted = []
         for i in message:
            message_encrypted.append(pow(int(i), key_a, key_n))
@@ -35,7 +32,7 @@ class rsa():
     def load_public_key(self, __key_n):
         key_n = __key_n
         key = ""
-        with open("backend_tests/RSA/key/public_keys.json", "r") as f:
+        with open("backend_server_side/RSA/key/public_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
 
@@ -48,7 +45,7 @@ class rsa():
         key_n = __key_n
 
         key = ""
-        with open("backend_tests/RSA/key/private_keys.json", "r") as f:
+        with open("backend_server_side/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         
@@ -61,12 +58,12 @@ class rsa():
     def generate_key(self):
         dict = self.generate_p_q_n_m(200, 210)
         dict["a"] = self.generate_coprime(dict["m"])
-        with open("backend_tests/RSA/key/private_keys.json", "r") as f:
+        with open("backend_server_side/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         key.append(dict)
         
-        with open("backend_tests/RSA/key/private_keys.json", "w") as f:
+        with open("backend_server_side/RSA/key/private_keys.json", "w") as f:
             json.dump(key, f)
 
     

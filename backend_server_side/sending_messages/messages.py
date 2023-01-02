@@ -1,7 +1,7 @@
 import sys
-sys.path.append("backend_tests")
+sys.path.append("backend_server_side")
 import RSA.rsa as rsa
-sys.path.append("backend_tests/sending_messages")
+sys.path.append("backend_server_side/sending_messages")
 
 class main:
     def __init__(self, message, sender, receiver, key_a):

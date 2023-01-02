@@ -4,9 +4,9 @@ import threading
 import datetime
 
 import sys
-sys.path.append("backend_tests")
+sys.path.append("backend_server_side")
 import sending_messages.messages as messages
-sys.path.append("backend_tests/sending_messages")
+sys.path.append("backend_server_side/sending_messages")
 
 
 
@@ -19,13 +19,14 @@ server.listen()
 
 
 def fetch_messages(username, client):
-    conn = sqlite3.connect('backend_tests/users.db')
+    conn = sqlite3.connect('backend_server_side/users.db')
     cur = conn.cursor()
     own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
     client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
 
-    # deleting received messages
-    message_ids_list = client.recv(1024).decode()
+    # deleting received messages from RAM
+    message_ids_list = eval(client.recv(1024).decode())
+    print(message_ids_list)
     client.send("ready".encode())
     username_from_user = client.recv(1024).decode()
     client.send("ready".encode())
@@ -33,11 +34,12 @@ def fetch_messages(username, client):
     user_id = cur.execute("SELECT id FROM users WHERE username = ?", (username_from_user, )).fetchall()[0][0]
 
     for message_id in message_ids_list:
+        print("del"+ str(message_id))
         cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))
     conn.commit()
 
 def send_message(username, client):
-    conn = sqlite3.connect('backend_tests/users.db')
+    conn = sqlite3.connect('backend_server_side/users.db')
     cur = conn.cursor()
     own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
     receiver = client.recv(1024).decode()
@@ -46,7 +48,6 @@ def send_message(username, client):
         receiver_id = cur.execute("SELECT id FROM users WHERE username = ?", (receiver, )).fetchall()[0][0]
     except:
         pass
-        # client.send("receiver unkown".encode())
 
     try:
         keys = cur.execute("SELECT rsa_key_n, rsa_key_a FROM users WHERE username = ?", (receiver, )).fetchall()[0]
@@ -55,7 +56,7 @@ def send_message(username, client):
         print("receiver unkown")
         client.send("receiver unkown".encode())
     
-    message = eval(client.recv(1024).decode())
+    message = eval(client.recv(4294967296).decode())
     
     date = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
     
@@ -73,7 +74,7 @@ def handle_connection(client):
     client.send("Password: ".encode())
     password = client.recv(1024).decode()
 
-    conn = sqlite3.connect('backend_tests/users.db')
+    conn = sqlite3.connect('backend_server_side/users.db')
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
@@ -83,8 +84,8 @@ def handle_connection(client):
         
         function = client.recv(1024).decode()
         if function == "f":
-            client.send("fetching messages".encode())
             fetch_messages(username, client)
+            client.send("fetching messages".encode())
         elif function == "s":
             send_message(username, client)
             client.send("sending message".encode())

@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect('backend_tests/users.db')
+conn = sqlite3.connect('backend_server_side/users.db')
 cur = conn.cursor()
 
 cur.execute(""" 
