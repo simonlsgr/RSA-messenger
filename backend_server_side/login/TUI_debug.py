@@ -17,9 +17,9 @@ option = "f"
 
 def delete_from_database(message_id_list: list, client_function: socket.socket, username: str):
     client_function.send(str(message_id_list).encode())
-    print(client_function.recv(1024).decode())
+    client_function.recv(1024).decode()
     client_function.send(username.encode())
-    print(client_function.recv(1024).decode())
+    client_function.recv(1024).decode()
     
     
 
@@ -36,8 +36,8 @@ def fetch_messages(client_function: socket.socket, username_function: str):
     for i, j in enumerate(list_of_tuples_containing_fetched_messages):
         list_decrypted_messages.append({
             "message_id": list_of_tuples_containing_fetched_messages[i][0],
-            "sender_id": list_of_tuples_containing_fetched_messages[i][2],
-            "receiver_id": list_of_tuples_containing_fetched_messages[i][1],
+            "sender_name": list_of_tuples_containing_fetched_messages[i][2],
+            "receiver_name": list_of_tuples_containing_fetched_messages[i][1],
             "message": backend_main.main().decrypt(int(list_of_tuples_containing_fetched_messages[i][3]), 
                                                    int(list_of_tuples_containing_fetched_messages[i][4]), 
                                                    int(list_of_tuples_containing_fetched_messages[i][5]), 
@@ -56,15 +56,38 @@ def fetch_messages(client_function: socket.socket, username_function: str):
         file_contents_temp = f.read()
         file_contents_temp = eval(file_contents_temp)
         message_ids = []
+        # for i in file_contents_temp:
+        #     message_ids.append(i["message_id"])
+        
         for i in file_contents_temp:
-            message_ids.append(i["message_id"])
+            for k in i["message"]:
+                message_ids.append(k["message_id"])
     
         message_ids_temp = []
         for i in list_decrypted_messages:
             if i["message_id"] not in message_ids:
-                file_contents_temp.append(i)
+                for k, l in enumerate(file_contents_temp):
+                    if l["sender_name"] == i["sender_name"]:
+                        l["message"].append(i) 
             elif i["message_id"] in message_ids:
                 message_ids_temp.append(i["message_id"])
+        
+        
+        for i in list_decrypted_messages:
+            counter = 0
+            for k in file_contents_temp:
+                if i["sender_name"] == k["sender_name"]:
+                    counter += 1
+            if counter == 0:
+                for k in list_decrypted_messages:
+                    file_contents_temp.append({
+                        "sender_name": k["sender_name"],
+                        "message": [k]
+                    })
+                
+                    
+                
+        
     
     
     delete_from_database(message_ids_temp, client_function, username_function)

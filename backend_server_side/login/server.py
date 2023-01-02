@@ -22,11 +22,23 @@ def fetch_messages(username, client):
     conn = sqlite3.connect('backend_server_side/users.db')
     cur = conn.cursor()
     own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
-    client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
+    # client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
+    
+    all_messages = cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()
+    
+    for i in range(len(all_messages)):
+        all_messages[i] = list(all_messages[i])
+    
+    for i, j in enumerate(all_messages):
+        all_messages[i][1] = cur.execute("SELECT username FROM users WHERE id = ?", (all_messages[i][1], )).fetchall()[0][0]
+        all_messages[i][2] = cur.execute("SELECT username FROM users WHERE id = ?", (all_messages[i][2], )).fetchall()[0][0]
+    
+    client.sendall(str(all_messages).encode())
+    
+    
 
     # deleting received messages from RAM
     message_ids_list = eval(client.recv(1024).decode())
-    print(message_ids_list)
     client.send("ready".encode())
     username_from_user = client.recv(1024).decode()
     client.send("ready".encode())
@@ -34,8 +46,7 @@ def fetch_messages(username, client):
     user_id = cur.execute("SELECT id FROM users WHERE username = ?", (username_from_user, )).fetchall()[0][0]
 
     for message_id in message_ids_list:
-        print("del"+ str(message_id))
-        cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))
+        print('cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))')
     conn.commit()
 
 def send_message(username, client):
