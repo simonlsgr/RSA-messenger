@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <!-- <link rel="stylesheet" href="/lib/pyscript/pyscript.css" /> -->
     <link rel="stylesheet" href="messenger.css">
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script> 
+    <!-- <script defer src="/lib/pyscript/pyscript.js"></script>  -->
+    <script defer type="module" src="./GUI_handling.js"></script>
     <title>RSA Messenger</title>
 </head>
 <body>
     <main class="main-wrapper">
         <ul class="wrapper-contacts">
-            <button class="contact selected-contact">Contact 1</button>
-            <button class="contact">Contact 2</button>
-            <button class="contact">Contact 3</button>
-            <button class="contact">Contact 4</button>
-            <button class="contact">Contact 5</button>
-            <button class="contact">Contact 6</button>
-            <button class="contact">Contact 7</button>
-            <button class="contact">Contact 8</button>
-            <button class="contact">Contact 9</button>
-            <button class="contact">Contact 10</button>
+            <button class="contact" id="contact_id_1" onClick="">Contact 1</button>
+            <button class="contact" id="contact_id_2" onClick="">Contact 2</button>
+            <button class="contact" id="contact_id_3" onClick="">Contact 3</button>
+            <button class="contact" id="contact_id_4" onClick="">Contact 4</button>
+            <button class="contact" id="contact_id_5" onClick="">Contact 5</button>
+            <button class="contact" id="contact_id_6" onClick="">Contact 6</button>
+            <button class="contact" id="contact_id_7" onClick="">Contact 7</button>
+            <button class="contact" id="contact_id_8" onClick="">Contact 8</button>
+            <button class="contact" id="contact_id_9" onClick="">Contact 9</button>
+            <button class="contact" id="contact_id_10" onClick="">Contact 10</button>
         </ul>
         <section class="section-contact">
             <div class="contact-name-wrapper">
@@ -31,31 +32,6 @@
             <ul class="texts">
                 <li class="message sent">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero et autem placeat fugiat beatae adipisci sit reiciendis sed? Sequi ullam assumenda accusantium saepe aperiam velit soluta temporibus, delectus dolorum nihil deleniti dolor laudantium sapiente ut consequatur minus sint! Porro, sit!</li>
                 <li class="message received">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab commodi dolores asperiores qui beatae aut corrupti? Repellendus, quis. Facere natus vitae in molestias ut, aut quidem quaerat veniam modi alias commodi iste nobis itaque accusantium sapiente minima id consequatur. Eaque.</li>
-                <li class="message sent">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi eveniet blanditiis perspiciatis? Reiciendis quos numquam aperiam a laudantium impedit esse?</li>
-                <li class="message received">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam fugit sequi ad, magnam provident non? Accusantium illum distinctio itaque nostrum inventore veritatis, earum laboriosam. In quasi mollitia reiciendis consequatur. Perspiciatis voluptas beatae recusandae odit maiores quidem obcaecati itaque, architecto nisi illo! Omnis sapiente, perspiciatis sed pariatur ut ratione beatae soluta blanditiis quisquam nam deserunt laudantium sit alias eos? Rerum officia sit asperiores minima adipisci est corporis pariatur veniam aut officiis dolore, id eveniet quod voluptas aliquid ab eius nostrum blanditiis laudantium eligendi. Cum corrupti asperiores incidunt quia. Tenetur in nihil cumque dolore cum ullam, veritatis hic non cupiditate, soluta velit!</li>
-                <li class="message sent">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio, voluptatem.</li>
-                <li class="message received">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut, obcaecati! Eos laboriosam voluptatum asperiores reiciendis quisquam! Ipsum temporibus ratione architecto.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur eaque nobis non officiis, tempore dignissimos, perferendis totam alias quasi eius quos quibusdam aut ad. Libero eveniet cumque suscipit beatae porro iste maiores voluptate velit culpa eligendi fugit ipsum, aut voluptatem quia quae ducimus sunt error! Hic ex deserunt, error quos minus quas adipisci qui ratione ipsam quia. Nostrum, magnam iure sit atque dolorem voluptas esse impedit reiciendis suscipit veniam, fugit sed doloremque perspiciatis ipsum illo maxime id aspernatur debitis nemo incidunt sunt laboriosam. Cupiditate totam quisquam vero sed minima fugit error, ipsa autem? Accusantium autem explicabo est in totam dolorum recusandae itaque optio. Eligendi, nihil quibusdam. Quam natus asperiores vel eligendi aspernatur nisi id mollitia. Esse cum voluptatibus libero omnis dolor magni rem necessitatibus, officia quaerat labore molestiae accusantium! Non officia unde repellat necessitatibus quam at, quibusdam voluptate explicabo itaque ipsa saepe repudiandae, cupiditate error optio dolorum id praesentium consectetur dicta, illo aliquid maxime! Rerum nihil eos nam fugit consequuntur voluptatem tenetur quas minus inventore, quis labore porro, esse ipsam commodi facere quae iusto? Ipsum velit, mollitia tenetur in delectus quasi, officia assumenda maiores, aspernatur ad natus dolorem amet placeat. Velit quaerat ipsam iure soluta hic adipisci, a voluptates et?</li>
-                <li class="message received">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, eum!</li>
-                <li class="message sent">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sint sequi nobis eum accusantium quis ex?</li>
-                <li class="message received">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis in mollitia explicabo perferendis, numquam ratione illo consectetur ipsa unde ipsam.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, assumenda?</li>
-                <li class="message received">Lorem ipsum dolor sit amet.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure provident ab maiores at, eos aut.</li>
-                <li class="message received">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore, eum.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque voluptas, sapiente dolorem aut porro omnis.</li>
-                <li class="message received">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, libero reprehenderit! Laboriosam rem itaque voluptas voluptatem modi? Magni impedit sed alias rerum autem atque quo. Quam commodi dicta rerum facilis.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam voluptatibus beatae ullam porro magni cumque rem sed ex provident laboriosam. Cupiditate rerum eligendi totam recusandae veritatis sed dolore quas esse?</li>
-                <li class="message received">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum repellat dicta iusto. Ipsam quis culpa officiis, architecto facilis maxime facere.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur quia officia voluptas atque incidunt, eveniet, quam quo reprehenderit facere, dolorem enim obcaecati perspiciatis ratione magni cupiditate necessitatibus dolorum. Adipisci maiores id aliquam vero sunt, distinctio non veritatis illum laudantium magni.</li>
-                <li class="message received">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, tempore.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo unde iste numquam sed iusto sapiente, ea ex quod deserunt totam veritatis dicta. Assumenda odio consequatur numquam eum, soluta nesciunt a, repellat aliquid architecto repellendus perferendis! Molestiae ipsum beatae aliquam, et excepturi atque nulla, culpa aperiam qui officia illum. Porro quis soluta aperiam asperiores repellat exercitationem? Incidunt atque facere odio beatae corrupti unde illum impedit nihil aliquid inventore neque saepe itaque quia ullam, adipisci accusantium debitis amet molestias. Delectus sunt ducimus non sed recusandae sint optio ratione, dolorem obcaecati hic quos, voluptatum eveniet vero ex? Consequatur minima iste tempora recusandae, veritatis dolore ratione sunt doloribus eius deleniti voluptate iusto ut aspernatur. Non tempora cum adipisci numquam? Aliquam aut eveniet harum. Aspernatur nihil dignissimos esse saepe libero ex atque, incidunt eius. Molestias reiciendis amet praesentium tempore accusamus dicta doloribus illo modi ab cum nam nobis debitis, voluptas quidem voluptates laudantium quo hic odio velit, unde perferendis repellendus. Pariatur voluptates tenetur error veniam fuga laboriosam itaque ab harum veritatis officia aliquid recusandae non iure perferendis provident cumque, consequatur saepe doloremque dolores, corrupti officiis quaerat? Animi laboriosam aspernatur dolore beatae harum, expedita dolor praesentium porro, doloribus dolores aliquid numquam sunt consectetur facilis incidunt voluptas. Eligendi cum beatae optio hic iste molestiae praesentium possimus autem voluptatum libero ab sapiente consectetur voluptatem animi ipsa commodi, inventore necessitatibus fugit assumenda, veritatis in quae accusamus? Accusamus molestias cumque nostrum sit unde quidem nulla perferendis dolore sapiente autem aut ad deleniti voluptatem a adipisci, vero fugiat delectus voluptatum necessitatibus dignissimos ea. Saepe, dolor. Ab facere id dignissimos ratione quibusdam vitae ex beatae dicta quos praesentium. Iste quia explicabo necessitatibus modi rem. Dignissimos ex laboriosam earum similique est, eius nulla eaque, architecto ut vero deserunt ipsam doloremque cupiditate nam aut reiciendis facilis, voluptatibus expedita. Maiores quae esse eum provident quisquam.</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
-                <li class="message sent">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam tempore sit dolores iste? Aut odio ipsam expedita ullam maxime et doloribus aliquid, odit nam itaque repellendus, numquam nihil excepturi officia magni at culpa accusamus consequuntur nostrum eius?</li>
             </ul>
             <form class="form-message-input">
                 <input type="text" class="message-input" placeholder="Message…">
@@ -63,6 +39,5 @@
             </form>
         </section>
     </main>
-    <py-script src="./GUI_handling.py"></py-script>
 </body>
 </html>

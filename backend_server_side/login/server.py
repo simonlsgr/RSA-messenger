@@ -46,7 +46,7 @@ def fetch_messages(username, client):
     user_id = cur.execute("SELECT id FROM users WHERE username = ?", (username_from_user, )).fetchall()[0][0]
 
     for message_id in message_ids_list:
-        print('cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))')
+        cur.execute("DELETE FROM messages_RAM WHERE message_id = ? AND receiver_id = ?", (message_id, user_id))
     conn.commit()
 
 def send_message(username, client):

@@ -52,12 +52,10 @@ def fetch_messages(client_function: socket.socket, username_function: str):
         })
         
     
-    with open("backend_server_side/login/fetched_messages.txt", "r") as f:
+    with open("backend_server_side/login/fetched_messages.json", "r") as f:
         file_contents_temp = f.read()
         file_contents_temp = eval(file_contents_temp)
         message_ids = []
-        # for i in file_contents_temp:
-        #     message_ids.append(i["message_id"])
         
         for i in file_contents_temp:
             for k in i["message"]:
@@ -84,19 +82,15 @@ def fetch_messages(client_function: socket.socket, username_function: str):
                         "sender_name": k["sender_name"],
                         "message": [k]
                     })
-                
-                    
-                
-        
     
     
     delete_from_database(message_ids_temp, client_function, username_function)
                 
     
-    with open("backend_server_side/login/fetched_messages.txt", "w") as f:
-        f.write(str(file_contents_temp))
+    with open("backend_server_side/login/fetched_messages.json", "w") as f:
+        json.dump(file_contents_temp, f)
     
-    with open("backend_server_side/login/fetched_messages.txt", "r") as f:
+    with open("backend_server_side/login/fetched_messages.json", "r") as f:
         print(f.read())
 
 def send_message(client_function: socket.socket, username_function: str):
