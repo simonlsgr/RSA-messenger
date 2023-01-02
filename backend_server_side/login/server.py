@@ -61,6 +61,13 @@ def send_message(username, client):
     date = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
     
     cur.execute("INSERT INTO messages_RAM (receiver_id, sender_id, encrypted_ciphertext, tag, encrypted_ciphertext_byte_length, tag_byte_length, encrypted_symmetric_key, encrypted_nonce, encrypted_symmetric_key_byte_length, encrypted_nonce_byte_length, public_key_rsa_n, date_sent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (receiver_id, own_id,str(message["encrypted_ciphertext"]), str(message["tag"]), str(message["encrypted_ciphertext_byte_length"]), str(message["tag_byte_length"]), str(message["encrypted_key" ]), str(message["encrypted_nonce"]), str(message["encrypted_key_byte_length"]), str(message["encrypted_nonce_byte_length"]), str(keys[0]), date))
+    
+    ### GENERATE NEW RSA KEY PAIR
+    key_pair = client.recv(1024).decode()
+    key_pair = eval(key_pair)
+    key_pair = (str(key_pair[0]), str(key_pair[1]))
+    cur.execute("UPDATE users SET rsa_key_n = ?, rsa_key_a = ? WHERE username = ?", (key_pair[0], key_pair[1], username))
+    
     conn.commit()
     
 

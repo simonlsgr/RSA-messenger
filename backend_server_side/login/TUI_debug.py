@@ -90,6 +90,19 @@ def send_message(client_function: socket.socket, username_function: str):
     
     encrypted_message = backend_main.main().encrypt(message, key_n, key_a)
     client_function.send(str(encrypted_message).encode())
+    
+    ### GENERATE NEW RSA KEY PAIR 
+    rsa.rsa().generate_key()
+    with open("backend_server_side/RSA/key/private_keys.json", "r") as f:
+        keys = json.load(f)
+    
+    new_key_n = keys[len(keys) - 1]["n"]
+    new_key_a = keys[len(keys) - 1]["a"]
+    
+    key_pair = (new_key_n, new_key_a)
+    key_pair = str(key_pair)
+    
+    client_function.send(key_pair.encode())
 
 
 
