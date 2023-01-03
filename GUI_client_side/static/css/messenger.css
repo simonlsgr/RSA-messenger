@@ -1,0 +1,172 @@
+:root {
+    --background-color-dark: #303346;
+    --background-color-darker: #252837;
+    --background-color-darkest: #1d1f2b;
+    --main-color: #6487fd;
+    --main-color-hover: #516ece;
+    --text-color: #f6fffe;
+    --text-color-darkened: #bcc5c4;
+
+    /* get the ubuntu font from google */
+    font-family: 'Ubuntu', sans-serif;
+
+}
+
+body {
+    background-color: var(--background-color-darkest);
+    overflow-x: hidden;
+    
+}
+.main-wrapper {
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+    background-color: var(--background-color-darkest);
+    display: flex;
+    gap: 39px;
+    width: 95vw;
+}
+
+.wrapper-contacts {
+    background-color: var(--background-color-darker);
+    height: 85vh;
+    width: 20vw;
+    overflow: scroll;
+    overflow-x: hidden;
+
+    /* center the items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 30px;
+
+    border-radius: 30px;
+
+    /* remove the scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+
+}
+
+.contact {
+    /* remove all styling  from the button */
+    /* remove the styling of the link*/
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    padding: 50px;
+    background-color: var(--background-color-dark);
+    color: var(--text-color);
+    font-size: 20px;
+
+    width: 65%;
+    margin: 15px 0 15px 0;
+
+    border-radius: 30px;
+    
+}
+
+.contact:hover {
+    background-color: var(--main-color-hover);
+}
+
+.selected-contact {
+    background-color: var(--main-color);
+}
+
+.selected-contact:hover {
+    background-color: var(--main-color);
+}
+
+.section-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    width: 100%;
+}
+
+.contact-name-wrapper {
+    background-color: var(--background-color-darker);
+    color: var(--text-color-darkened);
+    font-size: 30px;
+    align-self: flex-start;
+    width: 100%;
+    margin-left: 30px;
+    margin-bottom: 40px;
+    border-radius: 30px;
+}
+
+.contact-name {
+    padding-left: 150px;
+}
+
+.texts {
+    overflow: scroll;
+    list-style: none;
+    width: 100%;
+
+}
+
+.message {
+    margin: 10px;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 15px;
+    
+}
+
+.message.sent {
+    color: var(--text-color);
+    background-color: var(--main-color);
+    text-align: end;
+    margin-left: auto;
+    margin-right: 0;
+    border-bottom-right-radius: 2px;
+    max-width: 60%;
+}
+
+.message.received {
+    color: var(--text-color-darkened);
+    background-color: var(--background-color-dark);
+    border-bottom-left-radius: 2px;
+    max-width: 60%;
+}
+
+.form-message-input {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.message-input {
+    background-color: var(--background-color-dark);
+    border: none;
+    color: var(--text-color-darkened);
+    font-size: 20px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+    
+}
+
+.message-input:focus {
+    outline: none;
+}
+
+.send-button {
+    background-color: var(--main-color);
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    width: 60px;
+}
+
