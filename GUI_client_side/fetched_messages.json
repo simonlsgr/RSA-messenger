@@ -6,7 +6,21 @@
                 "message_id": 20,
                 "sender_name": "root",
                 "receiver_name": "Paul",
-                "message": "test",
+                "message": "test1",
+                "date": "01-02-2023 16:10:22"
+            },
+            {
+                "message_id": 21,
+                "sender_name": "root",
+                "receiver_name": "Paul",
+                "message": "test2",
+                "date": "01-02-2023 16:10:22"
+            },
+            {
+                "message_id": 20,
+                "sender_name": "Paul",
+                "receiver_name": "root",
+                "message": "test3",
                 "date": "01-02-2023 16:10:22"
             }
         ]
@@ -16,9 +30,23 @@
         "message": [
             {
                 "message_id": 21,
-                "sender_name": "root",
+                "sender_name": "root2",
                 "receiver_name": "Paul",
-                "message": "test2",
+                "message": "test4",
+                "date": "01-02-2023 16:10:30"
+            },
+            {
+                "message_id": 21,
+                "sender_name": "root2",
+                "receiver_name": "Paul",
+                "message": "test5",
+                "date": "01-02-2023 16:10:30"
+            },
+            {
+                "message_id": 21,
+                "sender_name": "Paul",
+                "receiver_name": "root2",
+                "message": "test6",
                 "date": "01-02-2023 16:10:30"
             }
         ]

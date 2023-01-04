@@ -50,6 +50,47 @@ body {
 
 }
 
+.add-contacts {
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--main-color-hover);
+    outline: none;
+    border: none;
+    position: relative;
+    margin-top: 15px;
+}
+
+.add-contacts:hover {
+    background-color: var(--main-color);
+}
+
+.add-contacts::after {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    height: 7px;
+    margin-top: -3.5px;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    z-index: 9;
+}
+
+.add-contacts::before {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    width: 7px;
+    margin-left: -3.5px;
+    left: 50%;
+    top: 5px;
+    bottom: 5px;
+    z-index: 9;
+}
+
 .contact {
     /* remove all styling  from the button */
     /* remove the styling of the link*/
