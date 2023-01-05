@@ -27,7 +27,7 @@ def index():
             html += f"""
             <a href="{j}.html" class="contact" id="contact_id_{j}">{j}</a>
             """
-    html += f"""<button class="add-contacts"></button></ul>
+    html += f"""<form action="/{name}.html" class="form-new-contact"><input type="text" class="new-contact-input" name="new-contact" placeholder="Username…"><button class="add-contact"></button></form></ul>
     <section class="section-contact">
             <div class="contact-name-wrapper">
                 <div class="placeholder-contact-name"></div>
@@ -58,8 +58,20 @@ def index():
         """
     return html
 
-@app.route('/<name>.html')
+
+
+@app.route('/<name>.html', methods = ["GET", "POST"])
 def contact(name):
+    
+    if flask.request.method == 'GET':
+        input_new_contact = flask.request.args.get("new-contact")
+        if input_new_contact != None and input_new_contact != "":
+            with open(basedir + "/fetched_messages.json", "r") as f:
+                data = json.load(f)
+                data.append({"sender_name": input_new_contact, "message": []})
+            with open(basedir + "/fetched_messages.json", "w") as f:
+                json.dump(data, f)
+            
     html = STANDARD_HEADER
     html += f"""<!DOCTYPE html>
     <title>{name}</title>
@@ -80,7 +92,7 @@ def contact(name):
                 html += f"""
                 <a href="{j}.html" class="contact" id="contact_id_{j}">{j}</a>
                 """
-    html += f"""<button class="add-contacts"></button></ul>
+    html += f"""<form action="/{name}.html" class="form-new-contact"><input type="text" class="new-contact-input" name="new-contact" placeholder="Username…"><button class="add-contact"></button></form></ul>
     <section class="section-contact">
             <div class="contact-name-wrapper">
                 <div class="placeholder-contact-name"></div>
@@ -102,7 +114,7 @@ def contact(name):
                         <li class="message sent">{k["message"]}</li>
                         """
     html += """</ul>
-            <form class="form-message-input">
+            <form class="form-message-input" method="POST">
                 <input type="text" class="message-input" placeholder="Message…">
                 <button class="send-button">↑</button>
             </form>
@@ -112,7 +124,7 @@ def contact(name):
 </html>
         """
     return html
-    
+
         
         
 

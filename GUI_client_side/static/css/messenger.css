@@ -50,7 +50,15 @@ body {
 
 }
 
-.add-contacts {
+.form-new-contact {
+    display: flex;
+    
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.add-contact {
     border-radius: 10px;
     width: 40px;
     height: 40px;
@@ -59,17 +67,20 @@ body {
     border: none;
     position: relative;
     margin-top: 15px;
+    margin-right: 0;
+    align-self: center;
+    cursor: pointer;
 }
 
-.add-contacts:hover {
+.add-contact:hover {
     background-color: var(--main-color);
 }
 
-.add-contacts::after {
+.add-contact::after {
     content: " ";
     position: absolute;
     display: block;
-    background-color: #fff;
+    background-color: var(--text-color-darkened);
     height: 7px;
     margin-top: -3.5px;
     top: 50%;
@@ -78,17 +89,30 @@ body {
     z-index: 9;
 }
 
-.add-contacts::before {
+.add-contact::before {
     content: " ";
     position: absolute;
     display: block;
-    background-color: #fff;
+    background-color: var(--text-color-darkened);
     width: 7px;
     margin-left: -3.5px;
     left: 50%;
     top: 5px;
     bottom: 5px;
     z-index: 9;
+}
+
+.new-contact-input {
+    width: 60%;
+    align-self: flex-end;
+    outline: none;
+    border: none;
+    height: 20px;
+    padding: 10px;
+
+    color: var(--text-color-darkened);
+    background-color: var(--background-color-dark);
+    border-radius: 10px;
 }
 
 .contact {
