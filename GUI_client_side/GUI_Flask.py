@@ -3,11 +3,14 @@ import flask
 import json
 import sys
 import datetime
+#### IMPORT SERVER_HANDLING NOT WORKING
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 datafile = os.path.join(basedir, 'fetched_messages.json')
 
 username = "Paul"
+password = "Paul1234"
 
 STANDARD_HEADER = """<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" href="https://thenounproject.com/api/private/icons/1238399/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=16&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0&token=gAAAAABjsyejDaujQ4nYlgT1OD9UIzOlDLBFGj1M_Xm1oraaDDz4BdSK_o2yDS3l0vpmrNCmQV_Z0NKdZulxZhE1D8MkDjN1JA%3D%3D" type="image/x-icon"><link rel="stylesheet" href="static/css/messenger.css">"""
 
@@ -77,6 +80,7 @@ def contact(name):
                 for i in data:
                     if i["sender_name"] == name:
                         i["message"].append({"message_id": 0, "sender_name": username, "receiver_name": name, "message": input_new_message, "date": datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")})
+                        server_handling(username, password, "s", input_new_message, name)
                 with open(basedir + "/fetched_messages.json", "w") as f:
                     json.dump(data, f)
             

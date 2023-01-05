@@ -7,7 +7,7 @@ import RSA.rsa as rsa
 
 
 class server_handling():
-    def __init__(self, username: str, password: str, option: str) -> None:
+    def __init__(self, username: str, password: str, option: str, message: str=None, receiver: str=None) -> None:
 
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect(('localhost', 10001))
@@ -17,17 +17,21 @@ class server_handling():
 
         self.username = username
         self.password = password
+        self.message = message
+        self.receiver = receiver
         
         self.client.recv(1024).decode()
         self.client.send(self.username.encode())
         self.client.recv(1024).decode()
         self.client.send(hashlib.sha256(self.password.encode()).hexdigest().encode())
-        self.client.recv(1024)
-        
+        if self.client.recv(1024).decode() == "Login failed":
+            print("Login Failed")
+            option = "exit"
+                    
         if option == "f":
             self.fetch_messages(self.client, self.username)
         elif option == "s":
-            self.send_message(self.client, self.username)
+            self.send_message(self.client, self.username, self.receiver, self.message)
 
     def delete_from_database(self, message_id_list: list, client_function: socket.socket, username: str):
         client_function.send(str(message_id_list).encode())

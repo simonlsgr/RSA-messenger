@@ -22,7 +22,6 @@ def fetch_messages(username, client):
     conn = sqlite3.connect('backend_server_side/users.db')
     cur = conn.cursor()
     own_id = cur.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchall()[0][0]
-    # client.sendall(str(cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()).encode())
     
     all_messages = cur.execute("SELECT * FROM messages_RAM WHERE receiver_id = ?", (own_id, )).fetchall()
     
@@ -98,7 +97,7 @@ def handle_connection(client):
     cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
 
     if cur.fetchall():
-        client.send("Login successful\nfetch messages(f)/send message(s):\n".encode())
+        client.send("Login successful".encode())
         
         function = client.recv(1024).decode()
         if function == "f":
