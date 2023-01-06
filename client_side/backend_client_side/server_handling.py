@@ -6,7 +6,7 @@ import backend_client_side.encryption_main as encryption_main
 
 
 class server_handling():
-    def __init__(self, username: str, password: str, option: str, message: str=None, receiver: str=None) -> None:
+    def __init__(self, username: str, password: str, option: str, message: str=None, receiver: str=None):
 
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect(('localhost', 10001))
@@ -25,7 +25,13 @@ class server_handling():
         self.client.send(hashlib.sha256(self.password.encode()).hexdigest().encode())
         if self.client.recv(1024).decode() == "Login failed":
             print("Login Failed")
-            option = "exit"
+            option = "Login Failed"
+        else:
+            if option == "auth":
+                print("Login successful")
+                option = "Login successful"
+                return option
+            
                     
         if option == "f":
             self.fetch_messages(self.client, self.username)
@@ -117,6 +123,9 @@ class server_handling():
         message = __message
         receiver = __receiver
         client_function.send(receiver.encode())
+        receiver_status = client_function.recv(1024).decode()
+        if receiver_status == "receiver unkown":
+            return print("Receiver unknown")
         try:
             key_n, key_a = eval(client_function.recv(1024).decode())
             key_n = int(key_n)

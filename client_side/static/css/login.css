@@ -1,0 +1,69 @@
+:root {
+    --background-color-dark: #303346;
+    --background-color-darker: #252837;
+    --background-color-darkest: #1d1f2b;
+    --main-color: #6487fd;
+    --main-color-hover: #516ece;
+    --text-color: #f6fffe;
+    --text-color-darkened: #bcc5c4;
+
+    /* get the ubuntu font from google */
+    font-family: 'Ubuntu', sans-serif;
+
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    display: flex;
+}
+
+.login-wrapper {
+    margin: auto;
+    background-color: var(--background-color-dark);
+    padding: 30px;
+    border-radius: 30px;
+
+}
+
+.login-wrapper h1 {
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    margin-bottom: 30px;
+}
+
+.login-form input {
+    box-sizing: border-box;
+    background-color: var(--background-color-darker);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    width: 100%;
+    outline: none;
+}
+
+.login-form input:focus {
+    background-color: var(--background-color-darkest);
+}
+
+.login-button {
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    outline: none;
+
+}

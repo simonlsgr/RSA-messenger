@@ -51,8 +51,10 @@ def send_message(username, client):
 
     try:
         receiver_id = cur.execute("SELECT id FROM users WHERE username = ?", (receiver, )).fetchall()[0][0]
+        client.send("receiver known".encode())
     except:
-        pass
+        client.send("receiver unkown".encode())
+        return
 
     try:
         keys = cur.execute("SELECT rsa_key_n, rsa_key_a FROM users WHERE username = ?", (receiver, )).fetchall()[0]

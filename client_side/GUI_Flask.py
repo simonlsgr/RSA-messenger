@@ -17,6 +17,13 @@ STANDARD_HEADER = """<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 
 app = flask.Flask(__name__)
 
+@app.route('/')
+def login():
+    html = STANDARD_HEADER
+    html += """<link rel="stylesheet" href="static/css/login.css"><title>Login</title></head><body>"""
+    html += """<div class="login-wrapper"><div class="login-form"><h1 class="login-title">Login</h1><form action="/index.html" method="POST"><input type="text" name="username" class="login-input" placeholder="Username"><input type="password" name="password" class="login-input" placeholder="Password"><button type="submit" class="login-button">Login</button></form></div></div>"""
+    return html
+
 @app.route('/index.html')
 def index():
     html = STANDARD_HEADER
