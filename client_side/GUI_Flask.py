@@ -1,9 +1,10 @@
 import os
 import flask
 import json
-import sys
 import datetime
-#### IMPORT SERVER_HANDLING NOT WORKING
+
+import backend_client_side.server_handling as server_handling
+
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -79,8 +80,8 @@ def contact(name):
                 data = json.load(f)
                 for i in data:
                     if i["sender_name"] == name:
+                        server_handling.server_handling(username, password, "s", input_new_message, name)
                         i["message"].append({"message_id": 0, "sender_name": username, "receiver_name": name, "message": input_new_message, "date": datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")})
-                        server_handling(username, password, "s", input_new_message, name)
                 with open(basedir + "/fetched_messages.json", "w") as f:
                     json.dump(data, f)
             

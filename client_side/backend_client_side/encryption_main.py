@@ -1,5 +1,5 @@
-import RSA.rsa as rsa
-import AES.aes as aes
+import backend_client_side.RSA.rsa as rsa
+import backend_client_side.AES.aes as aes
 
 class main():
     def __init__(self):

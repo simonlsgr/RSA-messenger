@@ -3,11 +3,6 @@ import socket
 import threading
 import datetime
 
-import sys
-sys.path.append("backend_server_side")
-import sending_messages.messages as messages
-sys.path.append("backend_server_side/sending_messages")
-
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,7 +60,7 @@ def send_message(username, client):
     except:
         print("receiver unkown")
         client.send("receiver unkown".encode())
-    
+        
     message = eval(client.recv(4294967296).decode())
     
     date = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")

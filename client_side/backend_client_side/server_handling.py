@@ -1,9 +1,8 @@
 import socket
 import hashlib
-import sys
 import json
-import encryption_main as encryption_main
-import RSA.rsa as rsa
+import backend_client_side.RSA.rsa as rsa
+import backend_client_side.encryption_main as encryption_main
 
 
 class server_handling():
@@ -30,8 +29,10 @@ class server_handling():
                     
         if option == "f":
             self.fetch_messages(self.client, self.username)
+            self.client.recv(1024).decode()
         elif option == "s":
             self.send_message(self.client, self.username, self.receiver, self.message)
+            self.client.recv(1024).decode()
 
     def delete_from_database(self, message_id_list: list, client_function: socket.socket, username: str):
         client_function.send(str(message_id_list).encode())
@@ -128,7 +129,7 @@ class server_handling():
         
         ### GENERATE NEW RSA KEY PAIR 
         rsa.rsa().generate_key()
-        with open("RSA/key/private_keys.json", "r") as f:
+        with open("client_side/backend_client_side/RSA/key/private_keys.json", "r") as f:
             keys = json.load(f)
         
         new_key_n = keys[len(keys) - 1]["n"]
