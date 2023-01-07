@@ -3,7 +3,11 @@ import hashlib
 import json
 import backend_client_side.RSA.rsa as rsa
 import backend_client_side.encryption_main as encryption_main
+import sys
+import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+datafile = os.path.join(basedir, 'fetched_messages.json')
 
 class server_handling():
     def __init__(self, username: str, password: str, option: str, message: str=None, receiver: str=None):
@@ -23,14 +27,9 @@ class server_handling():
         self.client.send(self.username.encode())
         self.client.recv(1024).decode()
         self.client.send(hashlib.sha256(self.password.encode()).hexdigest().encode())
-        if self.client.recv(1024).decode() == "Login failed":
-            print("Login Failed")
-            option = "Login Failed"
-        else:
-            if option == "auth":
-                print("Login successful")
-                option = "Login successful"
-                return option
+        self.login_status = self.client.recv(1024).decode()
+        if self.login_status == "Login failed":
+            option = self.login_status
             
                     
         if option == "f":
@@ -40,11 +39,14 @@ class server_handling():
             self.send_message(self.client, self.username, self.receiver, self.message)
             self.client.recv(1024).decode()
 
+        
+        
     def delete_from_database(self, message_id_list: list, client_function: socket.socket, username: str):
         client_function.send(str(message_id_list).encode())
         client_function.recv(1024).decode()
         client_function.send(username.encode())
         client_function.recv(1024).decode()
+        
     
     
 
@@ -77,24 +79,28 @@ class server_handling():
             })
             
         
-        with open("./GUI_client_side/fetched_messages.json", "r") as f:
+        with open("./client_side/fetched_messages.json", "r") as f:
             file_contents_temp = f.read()
             file_contents_temp = eval(file_contents_temp)
             message_ids = []
             
             for i in file_contents_temp:
                 for k in i["message"]:
-                    message_ids.append(k["message_id"])
-        
-            message_ids_temp = []
-            for i in list_decrypted_messages:
-                if i["message_id"] not in message_ids:
-                    for k, l in enumerate(file_contents_temp):
-                        if l["sender_name"] == i["sender_name"]:
-                            l["message"].append(i) 
-                elif i["message_id"] in message_ids:
-                    message_ids_temp.append(i["message_id"])
+                    if k["message_id"] != None:
+                        message_ids.append(k["message_id"])
+                        
+            contacts = []        
+            for i in file_contents_temp:
+                contacts.append(i["sender_name"])
             
+            for i in list_decrypted_messages:
+                if i["sender_name"] not in contacts:
+                    contacts.append(i["sender_name"])
+                    file_contents_temp.append({
+                        "sender_name": i["sender_name"],
+                        "message": [i]
+                    })
+
             
             for i in list_decrypted_messages:
                 counter = 0
@@ -107,16 +113,29 @@ class server_handling():
                             "sender_name": k["sender_name"],
                             "message": [k]
                         })
+                
+            
+            message_ids_temp = []
+            for i in list_decrypted_messages:
+                if i["message_id"] not in message_ids:
+                    for k, l in enumerate(file_contents_temp):
+                        if l["sender_name"] == i["sender_name"]:
+                            l["message"].append(i)
+                elif i["message_id"] in message_ids:
+                    message_ids_temp.append(i["message_id"])
+            
+            
+            
+            
+            print(message_ids_temp, file=sys.stderr)
         
         
         self.delete_from_database(message_ids_temp, client_function, username_function)
                     
         
-        with open("./GUI_client_side/fetched_messages.json", "w") as f:
+        with open("./client_side/fetched_messages.json", "w") as f:
             json.dump(file_contents_temp, f)
         
-        with open("./GUI_client_side/fetched_messages.json", "r") as f:
-            print(f.read())
 
     def send_message(self, client_function: socket.socket, username_function: str, __receiver: str, __message: str):
         client_function.send("s".encode())

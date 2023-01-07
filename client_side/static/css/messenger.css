@@ -135,6 +135,10 @@ body {
     
 }
 
+.contact:first-child {
+    display: none;
+}
+
 .contact:hover {
     background-color: var(--main-color-hover);
 }
