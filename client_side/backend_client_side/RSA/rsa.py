@@ -32,7 +32,7 @@ class rsa():
     def load_public_key(self, __key_n):
         key_n = __key_n
         key = ""
-        with open("backend_server_side/RSA/key/public_keys.json", "r") as f:
+        with open("backend_client_side/RSA/key/public_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
 
@@ -45,7 +45,7 @@ class rsa():
         key_n = __key_n
 
         key = ""
-        with open("backend_server_side/RSA/key/private_keys.json", "r") as f:
+        with open("backend_client_side/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         
@@ -58,12 +58,12 @@ class rsa():
     def generate_key(self):
         dict = self.generate_p_q_n_m(200, 210)
         dict["a"] = self.generate_coprime(dict["m"])
-        with open("backend_server_side/RSA/key/private_keys.json", "r") as f:
+        with open("backend_client_side/RSA/key/private_keys.json", "r") as f:
             key = f.read()
         key = json.loads(key)
         key.append(dict)
         
-        with open("backend_server_side/RSA/key/private_keys.json", "w") as f:
+        with open("backend_client_side/RSA/key/private_keys.json", "w") as f:
             json.dump(key, f)
 
     
