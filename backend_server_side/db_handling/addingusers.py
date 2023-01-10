@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 
-conn = sqlite3.connect('users.db')
+conn = sqlite3.connect('backend_server_side/users.db')
 cur = conn.cursor()
 
 cur.execute(""" 
@@ -25,5 +25,6 @@ def create_user(username, display_name, password):
 
 print(create_user("root", "root", "root"))
 print(create_user("Paul", "Paul", "Paul1234"))
+print(create_user("RKores", "RKores", "RKores2023!"))
 
 conn.commit()
